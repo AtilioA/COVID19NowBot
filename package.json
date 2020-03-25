@@ -7,6 +7,9 @@
   "author": "AtilioA",
   "license": "GPL-3.0",
   "dependencies": {
+    "axios": "^0.19.2",
+    "cheerio": "^1.0.0-rc.3",
+    "date-and-time": "^0.13.1",
     "dotenv": "^8.2.0",
     "localize": "^0.4.7",
     "telebot": "^1.3.0"
