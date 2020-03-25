@@ -41,7 +41,7 @@ Today in the *WORLD*:
 
 Fetched at ${currentDate}.`;
 
-  await bot.sendMessage(msg.chat.id, worldString, { parseMode: 'Markdown', });
+  await bot.sendMessage(msg.chat.id, worldString, { parseMode: 'Markdown', replyToMessage: msg.message_id });
 });
 
 bot.start();
