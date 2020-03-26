@@ -1,10 +1,8 @@
 const axios = require('axios');
 const cheerio = require('cheerio');
 
-// const page = 'https://www.jamesqquick.com/speaking';
-
 const page = "https://www.worldometers.info/coronavirus/";
-async function scrap_worldometer() {
+async function getWorldStats() {
   return await axios.get(page)
     .then((res) => {
       const $ = cheerio.load(res.data);
@@ -37,4 +35,4 @@ async function scrap_worldometer() {
     });
 }
 
-module.exports = scrap_worldometer;
+module.exports = getWorldStats;
