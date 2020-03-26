@@ -7,7 +7,7 @@ const bot = require('./bot_config.js');
 var myLocalize = require('./bot_localize.js');
 const getWorldStats = require('./data/scrap_worldometer.js');
 const { calculateDiffDays, createRankingString } = require('./utils.js');
-
+const { flag } = require('country-emoji');
 
 bot.on(['/start'], async (msg) => {
   console.log(`${msg.text} from ${msg.from.first_name} (${msg.from.username})`);
@@ -27,7 +27,7 @@ bot.on(['/all', '/total', '/world'], async (msg) => {
   const now = new Date();
   var currentDate = date.format(now, 'DD/MM/YYYY HH:mm:ss UTC', true);
 
-  var worldString = myLocalize.translate("worldStats", scrapObj['totalCases'], scrapObj['totalDeaths'], scrapObj['activeCases'], scrapObj['seriousCases'], scrapObj['totalRecovered'], scrapObj['newCases'], scrapObj['newDeaths'], currentDate, "WORLD");
+  var worldString = myLocalize.translate("worldStats", scrapObj['totalCases'], scrapObj['totalDeaths'] || 0, scrapObj['activeCases'], scrapObj['seriousCases'], scrapObj['totalRecovered'], scrapObj['newCases'], scrapObj['newDeaths'], currentDate, "WORLD");
 
   await bot.sendMessage(msg.chat.id, worldString, { parseMode: 'Markdown', replyToMessage: msg.message_id });
 });
@@ -54,13 +54,16 @@ bot.on(/^\/?(.+)$/, async (msg, props) => {
   }
 
   if (countryObj != undefined) {
+    console.log(countryObj["Country"]);
+    const countryFlag = flag(countryObj["Country"]);
+
     const now = new Date();
     var currentDate = date.format(now, 'DD/MM/YYYY HH:mm:ss UTC', true);
 
     var diffObj = await calculateDiffDays(7, countryObj['Country']);
     let { diffConfirmed, diffDeaths, diffRecovered, diffConfirmedPercentage, diffDeathsPercentage, diffRecoveredPercentage } = diffObj;
 
-    var worldString = myLocalize.translate("worldStats", countryObj['TotalCases'], countryObj['TotalDeaths'], countryObj['ActiveCases'], countryObj['Serious_Critical'], countryObj['TotalRecovered'], countryObj['NewCases'].replace(/\+/g, ''), countryObj['NewDeaths'].replace(/\+/g, ''), currentDate, countryObj["Country"], diffConfirmed, diffDeaths, diffRecovered, diffConfirmedPercentage, diffDeathsPercentage, diffRecoveredPercentage);
+    var worldString = myLocalize.translate("worldStats", countryObj['TotalCases'], countryObj['TotalDeaths'] || 0, countryObj['ActiveCases'] || 0, countryObj['Serious_Critical'] || 0, countryObj['TotalRecovered'] || 0, countryObj['NewCases'].replace(/\+/g, '') || 0, countryObj['NewDeaths'].replace(/\+/g, '') || 0, currentDate, countryObj["Country"], diffConfirmed, diffDeaths, diffRecovered, diffConfirmedPercentage, diffDeathsPercentage, diffRecoveredPercentage, countryFlag);
 
     await bot.sendMessage(msg.chat.id, worldString, { parseMode: 'Markdown', replyToMessage: msg.message_id });
   }

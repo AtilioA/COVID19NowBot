@@ -9,6 +9,7 @@
   "dependencies": {
     "axios": "^0.19.2",
     "cheerio": "^1.0.0-rc.3",
+    "country-emoji": "^1.5.0",
     "covid19-api": "^1.0.8",
     "date-and-time": "^0.13.1",
     "dotenv": "^8.2.0",

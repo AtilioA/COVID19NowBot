@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 const roundTo = require("round-to");
 const date = require('date-and-time');
-const getCountryStats = require('./data/consume_api');
+const { getCountryStats } = require('./data/consume_api');
 
 function calculateDiff(previous, current) {
   var previousNewCases = previous[previous.length - 1].confirmed - previous[0].confirmed;
