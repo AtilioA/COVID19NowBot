@@ -6,8 +6,7 @@ var covid19Api = require("covid19-api");
 const bot = require('./bot_config.js');
 var myLocalize = require('./bot_localize.js');
 const getWorldStats = require('./data/scrap_worldometer.js');
-const countries = require('./countries.js');
-const { titleCase, createRankingString } = require('./utils.js');
+const { createRankingString } = require('./utils.js');
 
 
 bot.on(['/start'], async (msg) => {
