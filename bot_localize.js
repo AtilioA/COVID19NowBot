@@ -15,13 +15,6 @@ Hello! This bot can fetch information and numbers of COVID-19 cases.
 \`/top N\` shows the N countries with *highest* total cases. _Example_: \`/top 10\`
 \`/bottom N\` shows the N countries with *lowest* total cases. _Example_: \`/bottom 10\`
 
-start - shows the welcome message.
-help - shows this help message.
-world - shows stats for the world.
-country - shows stats for the specified country.
-top - shows the N countries with *highest* total cases.
-bottom - shows the N countries with *lowest* total cases.
-
 —
 Source: worldometers.info/coronavirus/
 Created by @AtilioA`,
