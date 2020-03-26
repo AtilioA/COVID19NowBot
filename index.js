@@ -27,7 +27,7 @@ bot.on(['/all', '/total', '/world'], async (msg) => {
   const now = new Date();
   var currentDate = date.format(now, 'DD/MM/YYYY HH:mm:ss UTC', true);
 
-  var worldString = myLocalize.translate("worldStats", scrapObj['totalCases'], scrapObj['totalDeaths'] || 0, scrapObj['activeCases'], scrapObj['seriousCases'], scrapObj['totalRecovered'], scrapObj['newCases'], scrapObj['newDeaths'], currentDate, "WORLD");
+  var worldString = myLocalize.translate("worldStats", scrapObj['totalCases'], scrapObj['totalDeaths'] || 0, scrapObj['activeCases'], scrapObj['seriousCases'], scrapObj['totalRecovered'], scrapObj['newCases'], scrapObj['newDeaths'], currentDate, "WORLD", "", "", "", "", "", "", "🗺");
 
   await bot.sendMessage(msg.chat.id, worldString, { parseMode: 'Markdown', replyToMessage: msg.message_id });
 });
