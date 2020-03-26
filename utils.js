@@ -32,16 +32,16 @@ function calculateDiff(previous, current) {
 }
 
 async function calculateDiffDays(nDays, country = undefined) {
-  var res;
+  var countryStats;
   if (country) {
-    res = await getCountryStats(country);
+    countryStats = await getCountryStats(country);
   }
   else {
-    res = await getCountryStats();
+    countryStats = await getCountryStats();
   }
 
-  const previousWeek = res.splice(res.length - (nDays * 2), nDays);
-  const currentWeek = res.splice(res.length - nDays, nDays);
+  const previousWeek = countryStats.splice(countryStats.length - (nDays * 2), nDays);
+  const currentWeek = countryStats.splice(countryStats.length - nDays, nDays);
 
   const diff = calculateDiff(previousWeek, currentWeek);
   return diff;

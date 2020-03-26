@@ -8,9 +8,20 @@ var myLocalize = new Localize({
 Hello! This bot can fetch information and numbers of COVID-19 cases.
 
 🧭 *AVAILABLE COMMANDS*:
-/start shows this welcome message.
-/help shows the help message.
-/world shows stats for the world.\n
+/start shows the welcome message.
+/help shows this help message.
+/world shows stats for the world.
+/country shows stats for the specified country. _Example_: /brazil
+\`/top N\` shows the N countries with *highest* total cases. _Example_: \`/top 10\`
+\`/bottom N\` shows the N countries with *lowest* total cases. _Example_: \`/bottom 10\`
+
+start - shows the welcome message.
+help - shows this help message.
+world - shows stats for the world.
+country - shows stats for the specified country.
+top - shows the N countries with *highest* total cases.
+bottom - shows the N countries with *lowest* total cases.
+
 —
 Source: worldometers.info/coronavirus/
 Created by @AtilioA`,
@@ -43,8 +54,11 @@ Hello! This bot can fetch information and numbers of COVID-19 cases.
 🧭 *AVAILABLE COMMANDS*:
 /start shows the welcome message.
 /help shows this help message.
-/world shows stats for the world.\n
-/country shows stats for the specified country. Example: /usa
+/world shows stats for the world.
+/country shows stats for the specified country. _Example_: /brazil
+      The "/" is optional. _Example_: "\`brazil\`" would work too.
+\`/top N\` shows the N countries with *highest* total cases.\n    _Example_: \`/top 10\` lists the 10 countries with *highest* total cases. Defaults to 10.
+\`/bottom N\` shows the N countries with *lowest* total cases.\n    _Example_: \`/bottom 10\` lists the 10 countries with *lowest* total cases. Defaults to 10.
 
 📖 Open-source bot:
 https://github.com/AtilioA/COVID19NowBot
@@ -55,27 +69,32 @@ Created by @AtilioA`,
   },
 
   "worldStats": {
-    "english": `Today - *$[9]*:
+    "english": `Today — *$[9]*:
   🦠 $[6] new cases of COVID-19.
   ☠️ $[7] people died.
 
-So far - *$[9]*:
+So far — *$[9]*:
   🦠 $[1] cases of COVID-19.
   ☠️ $[2] people died.
   😷 $[3] active cases.
   🤒 $[4] people in critical condition.
   💊 $[5] people recovered.
 
+📊 Difference to last week (WIP):
+  $[10] cases ($[13]%)
+  $[11] deaths ($[14]%)
+  $[12] recovered ($[15]%)
+
 Fetched at $[8].`,
 
-    "br": `Atualmente - *$[9]*:
+    "br": `Atualmente — *$[9]*:
   🦠 $[1] casos de COVID-19.
   ☠️ $[2] pessoas morreram.
   😷 $[3] casos ativos.
   🤒 $[4] pessoas em condição crítica.
   💊 $[5] pessoas recuperaram-se.
 
-Hoje - *$[9]*:
+Hoje — *$[9]*:
   🦠 $[6] novos casos de COVID-19.
   ☠️ $[7] pessoas morreram.
 
