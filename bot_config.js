@@ -8,12 +8,12 @@ const bot = new telebot(process.env.BOT_TOKEN);
 const http = require('http');
 
 http.createServer((req, res) => {
-  res.write('Hello, World!');
+  res.write('COVID19NowBot is online.');
   res.end();
 }).listen(process.env.PORT || 3333);
 
 cron.schedule('0,15,30,45 * * * *', async () => {
-  axios.get('http://zapeador.herokuapp.com/');
+  axios.get('http://covid19nowbot.herokuapp.com/');
 });
 
 module.exports = bot;

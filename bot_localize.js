@@ -36,10 +36,50 @@ Source: worldometers.info/coronavirus
 Criée pour @AtilioA`
   },
 
-  "Substitution: $[1]": {
-    "en": "Substitution: $[1]",
-    "br": "Substituição: $[1]",
-    "fr": "Substitution: $[1]"
+  "help": {
+    "english": `🦠 @COVID19NowBot
+Hello! This bot can fetch information and numbers of COVID-19 cases.
+
+🧭 *AVAILABLE COMMANDS*:
+/start shows the welcome message.
+/help shows this help message.
+/world shows stats for the world.\n
+/country shows stats for the specified country. Example: /usa
+
+📖 Open-source bot:
+https://github.com/AtilioA/COVID19NowBot
+
+—
+Source: worldometers.info/coronavirus/
+Created by @AtilioA`,
+  },
+
+  "worldStats": {
+    "english": `Today - *$[9]*:
+  🦠 $[6] new cases of COVID-19.
+  ☠️ $[7] people died.
+
+So far - *$[9]*:
+  🦠 $[1] cases of COVID-19.
+  ☠️ $[2] people died.
+  😷 $[3] active cases.
+  🤒 $[4] people in critical condition.
+  💊 $[5] people recovered.
+
+Fetched at $[8].`,
+
+    "br": `Atualmente - *$[9]*:
+  🦠 $[1] casos de COVID-19.
+  ☠️ $[2] pessoas morreram.
+  😷 $[3] casos ativos.
+  🤒 $[4] pessoas em condição crítica.
+  💊 $[5] pessoas recuperaram-se.
+
+Hoje - *$[9]*:
+  🦠 $[6] novos casos de COVID-19.
+  ☠️ $[7] pessoas morreram.
+
+Buscado em $[8].`
   }
 });
 
