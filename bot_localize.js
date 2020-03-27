@@ -74,9 +74,9 @@ So far — $[16] *$[9]*:
   💊 $[5] people recovered.
 
 📊 Difference to last week (WIP):
-  $[10] cases ($[13]%)
-  $[11] deaths ($[14]%)
-  $[12] recovered ($[15]%)
+  $[10] cases (*$[13]%*)
+  $[11] deaths (*$[14]%*)
+  $[12] recovered (*$[15]%*)
 
 Fetched at $[8].`,
 
