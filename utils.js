@@ -13,11 +13,11 @@ function calculateDiff(previous, current) {
   var currentNewRecovered = current[current.length - 1].recovered - current[0].recovered;
 
   const diffConfirmed = currentNewCases - previousNewCases;
-  const diffConfirmedPercentage = roundTo((diffConfirmed / previousNewCases), 2);
+  const diffConfirmedPercentage = roundTo((diffConfirmed / previousNewCases * 100), 2);
   const diffDeaths = currentNewDeaths - previousNewDeaths;
-  const diffDeathsPercentage = roundTo((diffDeaths / previousNewDeaths), 2);
+  const diffDeathsPercentage = roundTo((diffDeaths / previousNewDeaths * 100), 2);
   const diffRecovered = currentNewRecovered - previousNewRecovered;
-  const diffRecoveredPercentage = roundTo((diffRecovered / previousNewRecovered), 2);
+  const diffRecoveredPercentage = roundTo((diffRecovered / previousNewRecovered * 100), 2);
 
   const casesDiff = {
     diffConfirmed,
