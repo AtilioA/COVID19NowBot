@@ -3,7 +3,15 @@ const axios = require('axios');
 require('dotenv/config');
 
 const telebot = require('telebot');
-const bot = new telebot(process.env.BOT_TOKEN);
+const bot = new telebot({
+  token: process.env.BOT_TOKEN,
+  polling: {
+    interval: 100,
+    timeout: 0,
+    limit: 100,
+    retryTimeout: 2000,
+  },
+});
 
 const http = require('http');
 
