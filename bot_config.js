@@ -2,16 +2,8 @@ const cron = require('node-cron');
 const axios = require('axios');
 require('dotenv/config');
 
-const telebot = require('telebot');
-const bot = new telebot({
-  token: process.env.BOT_TOKEN,
-  polling: {
-    interval: 100,
-    timeout: 0,
-    limit: 100,
-    retryTimeout: 2000,
-  },
-});
+const Telegraf = require('telegraf');
+const bot = new Telegraf(process.env.BOT_TOKEN);
 
 const http = require('http');
 
