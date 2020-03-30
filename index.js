@@ -46,7 +46,7 @@ bot.hears(['/prior', '/tropa_do_prior'], async (ctx) => {
         }]);
 });
 
-bot.hears(/\/?(\w+\s+\w+)$/i, async (ctx) => {
+bot.hears(/\/?(\w+\.?\s*(\w+)*)$/i, async (ctx) => {
     const text = ctx.match[1].toString().trim();
 
     // getReportsByCountries doesn't return info about new cases
