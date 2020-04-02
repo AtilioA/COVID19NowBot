@@ -3,8 +3,8 @@
 var Localize = require('localize');
 
 var myLocalize = new Localize({
-    "start": {
-        "english": `🦠 @COVID19NowBot
+  "start": {
+    "english": `🦠 @COVID19NowBot
 Hello! This bot can fetch information and numbers of COVID-19 cases.
 
 🧭 *AVAILABLE COMMANDS*:
@@ -19,7 +19,7 @@ Hello! This bot can fetch information and numbers of COVID-19 cases.
 Source: JHU CSSE, Worldometer and [covid19-api on NPM](https://www.npmjs.com/package/covid19-api#-references).
 Created by @AtilioA`,
 
-        "br": `🦠 @COVID19NowBot
+    "br": `🦠 @COVID19NowBot
 Olá! Este bot pode enviar informações e números de casos de COVID-19.
 
 🧭 *COMANDOS DISPONÍVEIS*:
@@ -30,7 +30,7 @@ Olá! Este bot pode enviar informações e números de casos de COVID-19.
 Fonte: JHU CSSE, Worldometer e [covid19-api no NPM](https://www.npmjs.com/package/covid19-api#-references).
 Criado por @AtilioA`,
 
-        "fr": `🦠 @COVID19NowBot
+    "fr": `🦠 @COVID19NowBot
 Salut ! Cette bot peut récupérer des informations et des nombres sur les cas de COVID-19.\n
 🧭 *COMMANDES DISPONIBLES*:
 /start affiche ce message de bienvenue.
@@ -38,10 +38,10 @@ Salut ! Cette bot peut récupérer des informations et des nombres sur les cas d
 —
 Source: JHU CSSE, Worldometer et [covid19-api sur NPM](https://www.npmjs.com/package/covid19-api#-references).
 Criée pour @AtilioA`
-    },
+  },
 
-    "help": {
-        "english": `🦠 @COVID19NowBot
+  "help": {
+    "english": `🦠 @COVID19NowBot
 Hello! This bot can fetch information and numbers of COVID-19 cases.
 
 🧭 *AVAILABLE COMMANDS*:
@@ -59,10 +59,38 @@ https://github.com/AtilioA/COVID19NowBot
 —
 Source: JHU CSSE, Worldometer and [covid19-api on NPM](https://www.npmjs.com/package/covid19-api#-references).
 Created by @AtilioA`,
-    },
+  },
 
-    "worldStats": {
-        "english": `Today — $[16] *$[9]*:
+  "worldStats": {
+    "english": `Today — $[10] *$[9]*:
+🦠 $[6] new cases of COVID-19.
+☠️ $[7] people died.
+
+So far — $[10] *$[9]*:
+🦠 $[1] cases of COVID-19.
+☠️ $[2] people died.
+😷 $[3] active cases.
+🤒 $[4] people in critical condition.
+💊 $[5] people recovered.
+
+Fetched at $[8].`,
+
+    "br": `Atualmente — *$[9]*:
+🦠 $[1] casos de COVID-19.
+☠️ $[2] pessoas morreram.
+😷 $[3] casos ativos.
+🤒 $[4] pessoas em condição crítica.
+💊 $[5] pessoas recuperaram-se.
+
+Hoje — *$[9]*:
+🦠 $[6] novos casos de COVID-19.
+☠️ $[7] pessoas morreram.
+
+Buscado em $[8].`
+  },
+
+  "countryStats": {
+    "english": `Today — $[16] *$[9]*:
   🦠 $[6] new cases of COVID-19.
   ☠️ $[7] people died.
 
@@ -73,14 +101,14 @@ So far — $[16] *$[9]*:
   🤒 $[4] people in critical condition.
   💊 $[5] people recovered.
 
-📊 Difference to last week (WIP):
+Difference to last week:
   $[10] cases (*$[13]%*)
   $[11] deaths (*$[14]%*)
   $[12] recovered (*$[15]%*)
 
 Fetched at $[8].`,
 
-        "br": `Atualmente — *$[9]*:
+    "br": `Atualmente — *$[9]*:
   🦠 $[1] casos de COVID-19.
   ☠️ $[2] pessoas morreram.
   😷 $[3] casos ativos.
@@ -92,7 +120,7 @@ Hoje — *$[9]*:
   ☠️ $[7] pessoas morreram.
 
 Buscado em $[8].`
-    }
+  }
 });
 
 myLocalize.setLocale("english");
