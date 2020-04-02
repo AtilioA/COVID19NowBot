@@ -36,15 +36,16 @@ async function calculateDiffDays(nDays, country = undefined) {
   if (country) {
     countryStats = await getCountryStats(country);
   }
-  else {
-    countryStats = await getCountryStats();
+
+  if (countryStats) {
+    const previousWeek = countryStats.splice(countryStats.length - (nDays * 2), nDays);
+    const currentWeek = countryStats.splice(countryStats.length - nDays, nDays);
+
+    const diff = calculateDiff(previousWeek, currentWeek);
+    return diff;
   }
 
-  const previousWeek = countryStats.splice(countryStats.length - (nDays * 2), nDays);
-  const currentWeek = countryStats.splice(countryStats.length - nDays, nDays);
-
-  const diff = calculateDiff(previousWeek, currentWeek);
-  return diff;
+  return undefined;
 }
 
 function titleCase(str) {

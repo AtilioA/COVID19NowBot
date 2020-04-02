@@ -10,18 +10,23 @@ const getWorldStats = require('./data/scrap_worldometer.js');
 const { calculateDiffDays, createRankingString } = require('./utils.js');
 const { flag } = require('country-emoji');
 
-bot.hears(['/start'], async (ctx) => {
+bot.command(['/start'], async (ctx) => {
   console.log(`${ctx.message.text} from ${ctx.from.first_name} (${ctx.from.username})`);
   await ctx.replyWithChatAction("typing");
-  ctx.replyWithMarkdown(myLocalize.translate("start"), Extra.inReplyTo(ctx.message.message_id));
+  ctx.replyWithMarkdown(myLocalize.translate("start"), { reply_to_message_id: ctx.message.message_id, disable_web_page_preview: true });
 });
 
-bot.hears(['/help', '/ajuda'], async (ctx) => {
+bot.command(['/help', '/ajuda'], async (ctx) => {
   await ctx.replyWithChatAction("typing");
-  ctx.replyWithMarkdown(myLocalize.translate("help"), { reply_to_message_id: ctx.message.message_id }, Extra.webPreview(false));
+  ctx.replyWithMarkdown(myLocalize.translate("help"), { reply_to_message_id: ctx.message.message_id, disable_web_page_preview: true });
 });
 
-bot.hears(['/all', '/total', '/world'], async (ctx) => {
+bot.command(['/country'], async (ctx) => {
+  await ctx.replyWithChatAction("typing");
+  ctx.replyWithMarkdown("Please specify a country instead of using _/country_.\nExample: */brazil*", { reply_to_message_id: ctx.message.message_id });
+});
+
+bot.command(['/all', '/total', '/world'], async (ctx) => {
   console.log("World.");
   await ctx.replyWithChatAction("typing");
 
@@ -34,7 +39,7 @@ bot.hears(['/all', '/total', '/world'], async (ctx) => {
   await ctx.replyWithMarkdown(worldString, { reply_to_message_id: ctx.message.message_id });
 });
 
-bot.hears(['/prior', '/tropa_do_prior'], async (ctx) => {
+bot.hears(['/prior', '/tropa_do_prior', /^prior/i], async (ctx) => {
   console.log("Joga y joga.");
   await ctx.replyWithChatAction("typing");
   ctx.replyWithMarkdown("_JOGA Y JOGA_...", { reply_to_message_id: ctx.message.message_id });
@@ -46,44 +51,17 @@ bot.hears(['/prior', '/tropa_do_prior'], async (ctx) => {
     }]);
 });
 
-bot.hears(/^\/?(\w+)$/, async (ctx) => {
-  const text = ctx.match[1].toString();
-
-  // getReportsByCountries doesn't return info about new cases
-  var countriesReports = await covid19Api.getReports();
-  var countryObj = undefined;
-
-  for (let country of countriesReports[0][0]['table'][0]) {
-    if (text.toLowerCase() == country['Country'].toLowerCase()) {
-      await ctx.replyWithChatAction("typing");
-      countryObj = country;
-    }
-  }
-
-  if (countryObj != undefined) {
-    console.log(countryObj["Country"]);
-    const countryFlag = flag(countryObj["Country"]);
-
-    const now = new Date();
-    var currentDate = date.format(now, 'DD/MM/YYYY HH:mm:ss UTC', true);
-
-    var diffObj = await calculateDiffDays(7, countryObj['Country']);
-    let { diffConfirmed, diffDeaths, diffRecovered, diffConfirmedPercentage, diffDeathsPercentage, diffRecoveredPercentage } = diffObj;
-
-    var worldString = myLocalize.translate("worldStats", countryObj['TotalCases'], countryObj['TotalDeaths'] || 0, countryObj['ActiveCases'] || 0, countryObj['Serious_Critical'] || 0, countryObj['TotalRecovered'] || 0, countryObj['NewCases'].replace(/\+/g, '') || 0, countryObj['NewDeaths'].replace(/\+/g, '') || 0, currentDate, countryObj["Country"], diffConfirmed, diffDeaths, diffRecovered, diffConfirmedPercentage, diffDeathsPercentage, diffRecoveredPercentage, countryFlag);
-
-    await ctx.replyWithMarkdown(worldString, { parseMode: 'Markdown', reply_to_message_id: ctx.message.message_id });
-  }
-});
-
-bot.hears(/\/(\w+)\s*(\d*)\s*/, async (ctx) => {
+bot.hears([/\/(top|bottom)(?:@COVID19NowBot)? (\d+)/], async (ctx) => {
   var commandText = ctx.match[1], nCountries = ctx.match[2];
+
   if (commandText == "top" || commandText == "bottom") {
+    await ctx.replyWithChatAction("typing");
     if (!nCountries) { nCountries = 10; }
     if (nCountries > 100) {
       const nTooBigWarning = `The maximum number of countries is *100*. I'll use *10* instead of ${nCountries}.`;
       await ctx.replyWithMarkdown(nTooBigWarning, { reply_to_message_id: ctx.message.message_id });
       nCountries = 10;
+      await ctx.replyWithChatAction("typing");
     }
 
     console.log(commandText, nCountries);
@@ -104,6 +82,40 @@ bot.hears(/\/(\w+)\s*(\d*)\s*/, async (ctx) => {
     const rankingString = createRankingString(commandText, nCountries, countriesReports);
 
     await ctx.replyWithMarkdown(rankingString, { reply_to_message_id: ctx.message.message_id });
+  }
+});
+
+bot.hears(/^\/?(\w+\.?\s*\w*)$/, async (ctx) => {
+  const text = ctx.match[1].toString();
+
+  // getReportsByCountries doesn't return info about new cases
+  var countriesReports = await covid19Api.getReports();
+  var countryObj = undefined;
+
+  for (let country of countriesReports[0][0]['table'][0]) {
+    if (text.toLowerCase() == country['Country'].toLowerCase()) {
+      await ctx.replyWithChatAction("typing");
+      countryObj = country;
+    }
+  }
+
+  if (countryObj != undefined) {
+    console.log(countryObj["Country"]);
+    const countryFlag = flag(countryObj["Country"]);
+
+    const now = new Date();
+    var currentDate = date.format(now, 'DD/MM/YYYY HH:mm:ss UTC', true);
+
+    var diffConfirmed, diffDeaths, diffRecovered, diffConfirmedPercentage, diffDeathsPercentage, diffRecoveredPercentage;
+
+    var diffObj = await calculateDiffDays(7, countryObj['Country']);
+    if (diffObj) {
+      ({ diffConfirmed, diffDeaths, diffRecovered, diffConfirmedPercentage, diffDeathsPercentage, diffRecoveredPercentage } = diffObj);
+    }
+
+    var worldString = myLocalize.translate("worldStats", countryObj['TotalCases'], countryObj['TotalDeaths'] || 0, countryObj['ActiveCases'] || 0, countryObj['Serious_Critical'] || 0, countryObj['TotalRecovered'] || 0, countryObj['NewCases'] || 0, countryObj['NewDeaths'] || 0, currentDate, countryObj["Country"], diffConfirmed, diffDeaths, diffRecovered, diffConfirmedPercentage, diffDeathsPercentage, diffRecoveredPercentage, countryFlag || "");
+
+    await ctx.replyWithMarkdown(worldString, { parseMode: 'Markdown', reply_to_message_id: ctx.message.message_id });
   }
 });
 
