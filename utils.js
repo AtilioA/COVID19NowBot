@@ -32,31 +32,20 @@ function calculateDiff(previous, current) {
 }
 
 async function calculateDiffDays(nDays, country = undefined) {
-    var countryStats;
-    if (country) {
-        countryStats = await getCountryStats(country);
-    }
-    else {
-        countryStats = await getCountryStats();
-    }
+  var countryStats;
+  if (country) {
+    countryStats = await getCountryStats(country);
+  }
 
-    if (countryStats) {
-        const previousWeek = countryStats.splice(countryStats.length - (nDays * 2), nDays);
-        const currentWeek = countryStats.splice(countryStats.length - nDays, nDays);
+  if (countryStats) {
+    const previousWeek = countryStats.splice(countryStats.length - (nDays * 2), nDays);
+    const currentWeek = countryStats.splice(countryStats.length - nDays, nDays);
 
-        const diff = calculateDiff(previousWeek, currentWeek);
-        return diff;
-    }
-    else {
-        return {
-            diffConfirmed: undefined,
-            diffDeaths: undefined,
-            diffRecovered: undefined,
-            diffConfirmedPercentage: undefined,
-            diffDeathsPercentage: undefined,
-            diffRecoveredPercentage: undefined
-        };
-    }
+    const diff = calculateDiff(previousWeek, currentWeek);
+    return diff;
+  }
+
+  return undefined;
 }
 
 function titleCase(str) {
