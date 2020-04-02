@@ -3,8 +3,9 @@ require('dotenv/config');
 const date = require('date-and-time');
 var covid19Api = require("covid19-api");
 
+var myLocalize = require("./locales/translations.js");
+
 const bot = require('./bot_config.js');
-var myLocalize = require('./bot_localize.js');
 const getWorldStats = require('./data/scrap_worldometer.js');
 const { calculateDiffDays, createRankingString, formatDiff } = require('./utils.js');
 const { flag } = require('country-emoji');
@@ -22,7 +23,7 @@ bot.command(['/help', '/ajuda'], async (ctx) => {
 
 bot.command(['/country'], async (ctx) => {
   await ctx.replyWithChatAction("typing");
-  ctx.replyWithMarkdown("Please specify a country instead of using _/country_.\nExample: */brazil*", { reply_to_message_id: ctx.message.message_id });
+  ctx.replyWithMarkdown(myLocalize.translate("country"), { reply_to_message_id: ctx.message.message_id });
 });
 
 bot.command(['/all', '/total', '/world'], async (ctx) => {
@@ -33,7 +34,7 @@ bot.command(['/all', '/total', '/world'], async (ctx) => {
   const now = new Date();
   var currentDate = date.format(now, 'DD/MM/YYYY HH:mm:ss UTC', true);
 
-  var worldString = myLocalize.translate("worldStats", scrapObj['totalCases'], scrapObj['totalDeaths'] || 0, scrapObj['activeCases'], scrapObj['seriousCases'], scrapObj['totalRecovered'], scrapObj['newCases'], scrapObj['newDeaths'], currentDate, "WORLD", "🗺");
+  var worldString = myLocalize.translate("worldStats", scrapObj['totalCases'], scrapObj['totalDeaths'] || 0, scrapObj['activeCases'], scrapObj['seriousCases'], scrapObj['totalRecovered'], scrapObj['newCases'], scrapObj['newDeaths'], currentDate, "🗺");
 
   await ctx.replyWithMarkdown(worldString, { reply_to_message_id: ctx.message.message_id });
 });
