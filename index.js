@@ -55,7 +55,7 @@ bot.command(['/country'], async (ctx) => {
   ctx.replyWithMarkdown(translate("country", locale), { reply_to_message_id: ctx.message.message_id });
 });
 
-bot.hears([/\/(?:locale(?:@COVID19NowBot)?(?:\s*(\w+))?)|\/(en)|\/(pt)|\/(br)|\/(fr)/], async (ctx) => {
+bot.hears([/\/(?:locale(?:@COVID19NowBot)?(?:\s*(\w+))?)|^\/(en)$|^\/(pt)$|^\/(br)$|^\/(fr)$/], async (ctx) => {
   for (let element of ctx.match.slice(1)) {
     if (element) {
       var locale = element;
@@ -209,10 +209,6 @@ bot.hears(/^\/?(\w+\.?\s*\w*)$/, async (ctx) => {
 
     await ctx.replyWithMarkdown(countryString, { parseMode: 'Markdown', reply_to_message_id: ctx.message.message_id });
   }
-});
-
-bot.hears([/\/(en|br|fr)/], async (ctx) => {
-
 });
 
 // clearOldMessages(bot);
