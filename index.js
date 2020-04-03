@@ -126,14 +126,14 @@ bot.command(['/all', '/total', '/world'], async (ctx) => {
   await ctx.replyWithMarkdown(worldString, { reply_to_message_id: ctx.message.message_id });
 });
 
-bot.hears(['/prior', '/tropa_do_prior', /^prior$/i], async (ctx) => {
-  console.log("Joga y joga.");
+bot.hears(['/babu', '/tropa_do_babu', /^babu$/i], async (ctx) => {
+  console.log("PAIZÃO TÁ ON");
   await ctx.replyWithChatAction("typing");
-  ctx.replyWithMarkdown("_JOGA Y JOGA_...", { reply_to_message_id: ctx.message.message_id });
+  ctx.replyWithMarkdown("*PAIZÃO TÁ ON*", { reply_to_message_id: ctx.message.message_id });
   await ctx.replyWithChatAction("upload_video");
   ctx.replyWithMediaGroup([
     {
-      media: 'BAACAgEAAxkBAAMFXnpQk-y5Qtm2usbDu9gEfj0mecQAAm4AA7cQ0EcytWs1Hs6JfRgE',
+      media: 'BAACAgEAAxkBAAOWXoeWEJags5oMMkxEdhb4BLZu6JcAAoIAA7S-OERsb0z0sxZWmxgE',
       type: 'video'
     }]);
 });
