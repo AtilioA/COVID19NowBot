@@ -211,9 +211,5 @@ bot.hears(/^\/?(\w+\.?\s*\w*)$/, async (ctx) => {
   }
 });
 
-bot.hears([/\/(en|br|fr)/], async (ctx) => {
-
-});
-
 // clearOldMessages(bot);
 bot.launch();
