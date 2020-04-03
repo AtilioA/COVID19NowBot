@@ -3,17 +3,28 @@ require('dotenv/config');
 const date = require('date-and-time');
 var covid19Api = require("covid19-api");
 
-var myLocalize = require("./locales/translations.js");
+var { myLocalize, locales } = require("./locales/translations.js");
 
 const bot = require('./bot_config.js');
 const getWorldStats = require('./data/scrap_worldometer.js');
 const { calculateDiffDays, createRankingString, formatDiff } = require('./utils.js');
 const { flag } = require('country-emoji');
+const { Chat } = require('./chat.model.js');
+const mongoose = require('mongoose');
+const uri = process.env.MONGODB_URI;
+
+mongoose.Promise = global.Promise;
+mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true }).then(() => {
+  console.log("Connected to MongoDB.");
+}).catch((err) => {
+  console.log("Couldn't connect to MongoDB: " + err);
+});
+
 
 bot.command(['/start'], async (ctx) => {
   console.log(`${ctx.message.text} from ${ctx.from.first_name} (${ctx.from.username})`);
   await ctx.replyWithChatAction("typing");
-  ctx.replyWithMarkdown(myLocalize.translate("start"), { reply_to_message_id: ctx.message.message_id, disable_web_page_preview: true });
+  ctx.replyWithMarkdown(myLocalize.translate("start", { locale: "fr" }), { reply_to_message_id: ctx.message.message_id, disable_web_page_preview: true });
 });
 
 bot.command(['/help', '/ajuda'], async (ctx) => {
@@ -24,6 +35,55 @@ bot.command(['/help', '/ajuda'], async (ctx) => {
 bot.command(['/country'], async (ctx) => {
   await ctx.replyWithChatAction("typing");
   ctx.replyWithMarkdown(myLocalize.translate("country"), { reply_to_message_id: ctx.message.message_id });
+});
+
+bot.hears([/\/(locale)(?:@COVID19NowBot)?(?:\s*(\w+))?/], async (ctx) => {
+  var locale = ctx.match[2];
+
+  console.log(locale);
+
+  switch (locale) {
+    case "english":
+      locale = "en";
+      break;
+    case "french":
+      locale = "fr";
+      break;
+    case "pt":
+      locale = "br";
+      break;
+  }
+
+  await ctx.replyWithChatAction("typing");
+  if (locales.indexOf(locale) != -1) {
+    const Chat = mongoose.model('Chat');
+
+    const chatQuery = await Chat.findOne({ id: ctx.message.chat.id }, async (err, doc) => {
+      if (!doc) {
+        console.log("new chat");
+        new Chat({
+          id: ctx.message.chat.id.toString(),
+          locale: "br"
+        }).save().then(async () => {
+          console.log("Saved new chat.");
+          await ctx.replyWithMarkdown(`Saved language preference as *${locale}*!`, { reply_to_message_id: ctx.message.message_id });
+        }).catch(async (err) => {
+          await ctx.replyWithMarkdown(`Couldn't save language preference as *${locale}*!`, { reply_to_message_id: ctx.message.message_id });
+          console.log("Couldn't create chat: " + err);
+        });
+      }
+      else {
+        console.log("chat exists already");
+        doc.locale = locale;
+        await doc.save();
+        await ctx.replyWithMarkdown(`Saved language preference as *${locale}*!`, { reply_to_message_id: ctx.message.message_id });
+        myLocalize.setLocale(locale);
+      }
+    });
+  }
+  else {
+    await ctx.replyWithMarkdown(`Unrecognized locale. Available locales: ${locales}`, { reply_to_message_id: ctx.message.message_id });
+  }
 });
 
 bot.command(['/all', '/total', '/world'], async (ctx) => {
@@ -119,4 +179,5 @@ bot.hears(/^\/?(\w+\.?\s*\w*)$/, async (ctx) => {
   }
 });
 
+// clearOldMessages(bot);
 bot.launch();

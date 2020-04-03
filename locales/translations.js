@@ -2,7 +2,7 @@ var Localize = require('localize');
 
 var myLocalize = new Localize({
     "start": { // /start message
-        "english": `🦠 @COVID19NowBot
+        "en": `🦠 @COVID19NowBot
 Hello! This bot can fetch information and numbers of COVID-19 cases.
 
 🧭 *AVAILABLE COMMANDS*:
@@ -48,7 +48,7 @@ Créé par @AtilioA`
     },
 
     "help": { // /help message
-        "english": `🦠 @COVID19NowBot
+        "en": `🦠 @COVID19NowBot
 Hello! This bot can fetch information and numbers of COVID-19 cases.
 
 🧭 *AVAILABLE COMMANDS*:
@@ -103,7 +103,7 @@ Créé par @AtilioA`
     },
 
     "worldStats": { // /world message
-        "english": `Today — $[9] *World*:
+        "en": `Today — $[9] *World*:
 🦠 $[6] new cases of COVID-19.
 ☠️ $[7] people died.
 
@@ -144,7 +144,7 @@ Récupéré à $[8].`,
     },
 
     "countryStats": { // /country message
-        "english": `Today — $[16] *$[9]*:
+        "en": `Today — $[16] *$[9]*:
   🦠 $[6] new cases of COVID-19.
   ☠️ $[7] people died.
 
@@ -200,12 +200,14 @@ Récupéré à $[8].`,
     },
 
     "country": {
-        "english": "Please specify a country instead of using _/country_.\nExample: */brazil*",
+        "en": "Please specify a country instead of using _/country_.\nExample: */brazil*",
         "br": "Por favor, especifique um país em vez de usar _/country_. Exemplo: */brazil*.",
         "fr": "S'il-vous-plaît, spécifiez un pays au lieu d'utiliser _/country_. Exemple: */brazil*."
     },
-});
+}, null, 'default');
+
+const locales = ["en", "br", "fr"];
 
 myLocalize.setLocale("br");
 
-module.exports = myLocalize;
+module.exports = {myLocalize, locales };

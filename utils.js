@@ -92,7 +92,7 @@ function createRankingString(order = "top", nCountries, countriesList) {
     rankingString += `*${country['Country']}*\n`;
     rankingString += `😷 ${country["ActiveCases"] || "0"} ☠️ ${country["TotalDeaths"] || "0"} 💊 ${country["TotalRecovered"] || "0"}\n\n`;
   }
-  
+
   const now = new Date();
   var currentDate = date.format(now, 'DD/MM/YYYY HH:mm:ss UTC', true);
   rankingString += `Fetched at ${currentDate}.`;
@@ -100,4 +100,15 @@ function createRankingString(order = "top", nCountries, countriesList) {
   return rankingString;
 }
 
-module.exports = { calculateDiffDays, titleCase, createRankingString, formatDiff };
+async function clearOldMessages(tgBot) {
+  // Get updates for the bot
+  const updates = await tgBot.telegram.getUpdates(0, 100, -1);
+
+  //  Add 1 to the ID of the last one, if there is one
+  return updates.length > 0
+    ? updates[updates.length - 1].update_id + 1
+    : 0
+    ;
+}
+
+module.exports = { calculateDiffDays, titleCase, createRankingString, formatDiff, clearOldMessages };
