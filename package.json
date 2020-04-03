@@ -13,7 +13,6 @@
     "covid19-api": "^1.0.8",
     "date-and-time": "^0.13.1",
     "dotenv": "^8.2.0",
-    "localize": "^0.4.7",
     "mongodb": "^3.5.5",
     "mongoose": "^5.9.7",
     "node-cron": "^2.0.3",

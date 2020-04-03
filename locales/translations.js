@@ -1,9 +1,29 @@
-var Localize = require('localize');
+function translate(stringID, locale, ...args) {
+  switch (stringID) {
+    case "start":
+      return translateStart(locale, ...args);
+    case "help":
+      return translateHelp(locale, ...args);
+    case "worldStats":
+      return translateWorldStats(locale, ...args);
+    case "countryStats":
+      return translateCountryStats(locale, ...args);
+    case "country":
+      return translateCountry(locale, ...args);
+    case "setLocale":
+      return translateSetLocale(locale, ...args);
+  }
+}
 
-var myLocalize = new Localize({
-    "start": { // /start message
-        "en": `🦠 @COVID19NowBot
+function translateStart(locale, ...args) {
+  const start = { // /start message
+    "en": `🦠 @COVID19NowBot
 Hello! This bot can fetch information and numbers of COVID-19 cases.
+
+You can change the language with the following commands:
+*/en* for English
+*/br* for Brazilian Portuguese (Português do Brasil)
+*/fr* for French (Français)
 
 🧭 *AVAILABLE COMMANDS*:
 */start* shows the welcome message.
@@ -17,7 +37,7 @@ Hello! This bot can fetch information and numbers of COVID-19 cases.
 Source: JHU CSSE, Worldometer and [covid19-api on NPM](https://www.npmjs.com/package/covid19-api#-references).
 Created by @AtilioA`,
 
-        "br": `🦠 @COVID19NowBot
+    "br": `🦠 @COVID19NowBot
 Olá! Este bot pode enviar informações e números de casos de COVID-19.
 
 🧭 *COMANDOS DISPONÍVEIS*:
@@ -32,7 +52,7 @@ Olá! Este bot pode enviar informações e números de casos de COVID-19.
 *Fonte*: JHU CSSE, Worldometer e [covid19-api no NPM](https://www.npmjs.com/package/covid19-api#-references).
 Criado por @AtilioA`,
 
-        "fr": `🦠 @COVID19NowBot
+    "fr": `🦠 @COVID19NowBot
 Salut ! Cette bot peut récupérer des informations et des nombres sur les cas de COVID-19.\n
 🧭 *COMMANDES DISPONIBLES*:
 */start* affiche ce message de bienvenue.
@@ -40,23 +60,34 @@ Salut ! Cette bot peut récupérer des informations et des nombres sur les cas d
 */world* affiche des statistiques pour le monde.
 */country* affiche des statistiques pour le pays spécifié. _Exemple_: */brazil*.
 \`/top N\` affiche les N pays avec des *le plus grand* nombre de cas totaux.\n    _Exemple_: \`/top 10\`.
-\`/bottom N\` affiche les N pays avec des *le plus petit* nombre de cas totaux\n    _Exemple_: \`/bottom 10\`.
+\`/bottom N\` affiche les N pays avec des *le plus petit* nombre de cas totaux.\n    _Exemple_: \`/bottom 10\`.
 
 —
 *Source*: JHU CSSE, Worldometer et [covid19-api sur NPM](https://www.npmjs.com/package/covid19-api#-references).
 Créé par @AtilioA`
-    },
+  };
 
-    "help": { // /help message
-        "en": `🦠 @COVID19NowBot
+  return start[locale];
+}
+
+
+function translateHelp(locale, ...args) {
+  const help = { // /help message
+    "en": `🦠 @COVID19NowBot
 Hello! This bot can fetch information and numbers of COVID-19 cases.
+
+You can change the language with the following commands:
+*/en* for English
+*/br* for Brazilian Portuguese (Português do Brasil)
+*/fr* for French (Français)
+Or \`/locale lang\`, where \`lang\` is *en*, *br* or *fr*.
 
 🧭 *AVAILABLE COMMANDS*:
 */start* shows the welcome message.
 */help* shows this help message.
 */world* shows stats for the world.
 */country* shows stats for the specified country. _Example_: /brazil
-      The "/" is optional. _Example_: "\`brazil\`" would work too.
+    The "/" is optional. _Example_: "\`brazil\`" would work too.
 \`/top N\` shows the N countries with *highest* total cases.\n    _Example_: \`/top 10\` lists the 10 countries with *highest* total cases. Defaults to 10.
 \`/bottom N\` shows the N countries with *lowest* total cases.\n    _Example_: \`/bottom 10\` lists the 10 countries with *lowest* total cases. Defaults to 10.
 
@@ -67,7 +98,7 @@ https://github.com/AtilioA/COVID19NowBot
 Source: JHU CSSE, Worldometer and [covid19-api on NPM](https://www.npmjs.com/package/covid19-api#-references).
 Created by @AtilioA`,
 
-        "br": `🦠 @COVID19NowBot
+    "br": `🦠 @COVID19NowBot
 Olá! Este bot pode enviar informações e números de casos de COVID-19.
 
 🧭 *COMANDO DISPONÍVEIS*:
@@ -75,7 +106,7 @@ Olá! Este bot pode enviar informações e números de casos de COVID-19.
 */help* mostra esta mensagem de ajuda.
 */world* mostra estatísticas para o mundo.
 */country* mostra estatísticas pro país especificado. _Exemplo_: */brazil*.
-      O "/" é opcional. _Exemplo_: "\`brazil\`" também funcionaria.
+    O "/" é opcional. _Exemplo_: "\`brazil\`" também funcionaria.
 \`/top N\` mostra os N países com *maiores* números de casos totais.\n    _Exemplo_: \`/top 10\` lista os 10 países com o *maiores* números de casos totais. O padrão é 10.
 \`/bottom N\` mostra os N países com *menores* números de casos totais.\n    _Exemplo_: \`/bottom 10\` lista os 10 países com o *menores* números de casos totais. O padrão é 10.
 
@@ -86,128 +117,151 @@ https://github.com/AtilioA/COVID19NowBot
 Fontes: JHU CSSE, Worldometer e [covid19-api no NPM](https://www.npmjs.com/package/covid19-api#-references).
 Criado por @AtilioA`,
 
-        "fr": `🦠 @COVID19NowBot
+    "fr": `🦠 @COVID19NowBot
 Salut ! Cette bot peut récupérer des informations et des nombres sur les cas de COVID-19.\n
 🧭 *COMMANDES DISPONIBLES*:
 */start* affiche ce message de bienvenue.
 */help* affiche le message d'aide.
 */world* affiche des statistiques pour le monde.
 */country* affiche des statistiques pour le pays spécifié. _Exemple_: */brazil*.
-        Le "/" est facultatif. _Exemple_: "\`brazil\`" fonctionnerait aussi bien.
+    Le "/" est facultatif. _Exemple_: "\`brazil\`" fonctionnerait aussi bien.
 \`/top N\` affiche les N pays avec des *le plus grand* nombre de cas totaux.\n    _Exemple_: \`/top 10\` énumère les 10 pays avec des *le plus grand* nombre de cas totaux.
 \`/bottom N\` affiche les N pays avec des *le plus petit* nombre de cas totaux.\n    _Exemple_: \`/bottom 10\` énumère les 10 pays avec des *le plus petit* nombre de cas totaux.
 
 —
 *Source*: JHU CSSE, Worldometer et [covid19-api sur NPM](https://www.npmjs.com/package/covid19-api#-references).
 Créé par @AtilioA`
-    },
+  };
 
-    "worldStats": { // /world message
-        "en": `Today — $[9] *World*:
-🦠 $[6] new cases of COVID-19.
-☠️ $[7] people died.
+  return help[locale];
+}
 
-So far — $[9] *World*:
-🦠 $[1] cases of COVID-19.
-☠️ $[2] people died.
-😷 $[3] active cases.
-🤒 $[4] people in critical condition.
-💊 $[5] people recovered.
+function translateWorldStats(locale, ...args) {
+  const worldStats = { // /world message
+    "en": `Today — ${args[8]} * World *:
+  🦠 ${args[5]} new cases of COVID-19.
+  ☠️ ${args[6]} people died.
 
-Fetched at $[8].`,
+So far — ${args[8]} * World *:
+  🦠 ${args[0]} cases of COVID-19.
+  ☠️ ${args[1]} people died.
+  😷 ${args[2]} active cases.
+  🤒 ${args[3]} people in critical condition.
+  💊 ${args[4]} people recovered.
 
-        "br": `Atualmente — *$[9]*:
-🦠 $[1] casos de COVID-19.
-☠️ $[2] pessoas morreram.
-😷 $[3] casos ativos.
-🤒 $[4] pessoas em condição crítica.
-💊 $[5] pessoas recuperaram-se.
+Fetched at ${args[7]}.`,
 
-Hoje — *$[9]*:
-🦠 $[6] novos casos de COVID-19.
-☠️ $[7] pessoas morreram.
+    "br": `Hoje — ${args[8]} *Mundo*:
+  🦠 ${args[5]} novos casos de COVID-19.
+  ☠️ ${args[6]} pessoas morreram.
 
-Buscado em $[8].`,
+Atualmente — ${args[8]} *Mundo*:
+  🦠 ${args[0]} casos de COVID-19.
+  ☠️ ${args[1]} pessoas morreram.
+  😷 ${args[2]} casos ativos.
+  🤒 ${args[3]} pessoas em condição crítica.
+  💊 ${args[4]} pessoas recuperaram-se.
 
-        "fr": `Aujourd'hui — $[9] *Monde*:
-  🦠 $[6] nouveaux cas de COVID-19.
-  ☠️ $[7] personnes sont mortes.
+Buscado em ${args[7]}.`,
 
-Actuellement — $[9] *Monde*:
-  🦠 $[1] cas de COVID-19.
-  ☠️ $[2] personnes sont mortes.
-  😷 $[3] cas actifs.
-  🤒 $[4] personnes dans un état critique.
-  💊 $[5] personnes se sont récupérés.
+    "fr": `Aujourd'hui — ${args[8]} *Monde*:
+  🦠 ${args[5]} nouveaux cas de COVID-19.
+  ☠️ ${args[6]} personnes sont mortes.
 
-Récupéré à $[8].`,
-    },
+Actuellement — ${args[8]} *Monde*:
+  🦠 ${args[0]} cas de COVID-19.
+  ☠️ ${args[1]} personnes sont mortes.
+  😷 ${args[2]} cas actifs.
+  🤒 ${args[3]} personnes dans un état critique.
+  💊 ${args[4]} personnes se sont récupérés.
 
-    "countryStats": { // /country message
-        "en": `Today — $[16] *$[9]*:
-  🦠 $[6] new cases of COVID-19.
-  ☠️ $[7] people died.
+Récupéré à ${args[7]}.`,
+  };
 
-So far — $[16] *$[9]*:
-  🦠 $[1] cases of COVID-19.
-  ☠️ $[2] people died.
-  😷 $[3] active cases.
-  🤒 $[4] people in critical condition.
-  💊 $[5] people recovered.
+  return worldStats[locale];
+}
+
+function translateCountryStats(locale, ...args) {
+  const countryStats = {  // /country message
+    "en": `Today — ${args[15]} *${args[8]} *:
+  🦠 ${args[5]} new cases of COVID-19.
+  ☠️ ${args[6]} people died.
+
+So far — ${args[15]} *${args[8]} *:
+  🦠 ${args[0]} cases of COVID-19.
+  ☠️ ${args[1]} people died.
+  😷 ${args[2]} active cases.
+  🤒 ${args[3]} people in critical condition.
+  💊 ${args[4]} people recovered.
 
 Difference to last week:
-  $[10] cases (*$[13]%*)
-  $[11] deaths (*$[14]%*)
-  $[12] recovered (*$[15]%*)
+  ${args[9]} cases (*${args[12]}%*)
+  ${args[10]} deaths (*${args[13]}%*)
+  ${args[11]} recovered (*${args[14]}%*)
 
-Fetched at $[8].`,
+  Fetched at ${args[7]}.`,
 
-        "br": `Hoje — *$[9]*:
-  🦠 $[6] novos casos de COVID-19.
-  ☠️ $[7] pessoas morreram.
+    "br": `Hoje — ${args[15]} *${args[8]}*:
+  🦠 ${args[5]} novos casos de COVID- 19.
+  ☠️ ${args[6]} pessoas morreram.
 
-Atualmente — $[16] *$[9]*:
-  🦠 $[1] casos de COVID-19.
-  ☠️ $[2] pessoas morreram.
-  😷 $[3] casos ativos.
-  🤒 $[4] pessoas em condição crítica.
-  💊 $[5] pessoas recuperaram-se.
+Atualmente — ${args[15]} *${args[8]}*:
+  🦠 ${args[0]} casos de COVID-19.
+  ☠️ ${args[1]} pessoas morreram.
+  😷 ${args[2]} casos ativos.
+  🤒 ${args[3]} pessoas em condição crítica.
+  💊 ${args[4]} pessoas recuperaram-se.
 
 Diferença para a semana passada:
-  $[10] casos (*$[13]%*)
-  $[11] mortes (*$[14]%*)
-  $[12] recuperados (*$[15]%*)
+  ${args[9]} casos (*${args[12]}%*)
+  ${args[10]} mortes (*${args[13]}%*)
+  ${args[11]} recuperados (*${args[14]}%*)
 
-Buscado em $[8].`,
+Buscado em ${args[7]}.`,
 
-        "fr": `Aujourd'hui — *$[9]*:
-  🦠 $[6] nouveaux cas de COVID-19.
-  ☠️ $[7] personnes sont mortes.
+    "fr": `Aujourd'hui — ${args[15]} *${args[8]}*:
+  🦠 ${args[5]} nouveaux cas de COVID-19.
+  ☠️ ${args[6]} personnes sont mortes.
 
-Actuellement — $[16] *$[9]*:
-  🦠 $[1] cas de COVID-19.
-  ☠️ $[2] personnes sont mortes.
-  😷 $[3] cas actifs.
-  🤒 $[4] personnes dans un état critique.
-  💊 $[5] personnes se sont récupérés.
+Actuellement — ${args[15]} *${args[8]}*:
+  🦠 ${args[0]} cas de COVID-19.
+  ☠️ ${args[1]} personnes sont mortes.
+  😷 ${args[2]} cas actifs.
+  🤒 ${args[3]} personnes dans un état critique.
+  💊 ${args[4]} personnes se sont récupérés.
 
 Par rapport à la semaine dernière:
-  $[10] cas (*$[13]%*)
-  $[11] mortes (*$[14]%*)
-  $[12] récupérées (*$[15]%*)
+  ${args[9]} cas (*${args[12]}%*)
+  ${args[10]} mortes (*${args[13]}%*)
+  ${args[11]} récupérées (*${args[14]}%*)
 
-Récupéré à $[8].`,
-    },
+Récupéré à ${args[7]}.`,
+  };
 
-    "country": {
-        "en": "Please specify a country instead of using _/country_.\nExample: */brazil*",
-        "br": "Por favor, especifique um país em vez de usar _/country_. Exemplo: */brazil*.",
-        "fr": "S'il-vous-plaît, spécifiez un pays au lieu d'utiliser _/country_. Exemple: */brazil*."
-    },
-}, null, 'default');
+  return countryStats[locale];
+
+}
+
+function translateCountry(locale, ...args) {
+  const country = { // /"country" message
+    "en": "Please specify a country instead of using _/country_.\nExample: */brazil*",
+    "br": "Por favor, especifique um país em vez de usar _/country_. Exemplo: */brazil*.",
+    "fr": "S'il-vous-plaît, spécifiez un pays au lieu d'utiliser _/country_. Exemple: */brazil*."
+  };
+
+  return country[locale];
+}
+
+function translateSetLocale(locale, ...args) {
+  const setLocale = {
+    "en": `I've set the display language to *${locale}*!`,
+    "br": `Defini a preferência de idioma para *${locale}*!`,
+    "fr": `J'ai défini la préférence de langue sur *${locale}*!`
+  };
+
+  return setLocale[locale];
+}
 
 const locales = ["en", "br", "fr"];
 
-myLocalize.setLocale("br");
-
-module.exports = {myLocalize, locales };
+module.exports = { locales, translate };

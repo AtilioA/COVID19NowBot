@@ -317,11 +317,6 @@ combined-stream@^1.0.6, combined-stream@~1.0.6:
   dependencies:
     delayed-stream "~1.0.0"
 
-commander@~2.1.0:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/commander/-/commander-2.1.0.tgz#d121bbae860d9992a3d517ba96f56588e47c6781"
-  integrity sha1-0SG7roYNmZKj1Re6lvVliOR8Z4E=
-
 concat-map@0.0.1:
   version "0.0.1"
   resolved "https://registry.yarnpkg.com/concat-map/-/concat-map-0.0.1.tgz#d8a96bd77fd68df7793a73036a3ba0d5405d477b"
@@ -937,13 +932,6 @@ latest-version@^3.0.0:
   integrity sha1-ogU4P+oyKzO1rjsYq+4NwvNW7hU=
   dependencies:
     package-json "^4.0.0"
-
-localize@^0.4.7:
-  version "0.4.7"
-  resolved "https://registry.yarnpkg.com/localize/-/localize-0.4.7.tgz#e3b69e5ac1ee47fe211ff07a02b8f2e969bf9cfa"
-  integrity sha1-47aeWsHuR/4hH/B6Arjy6Wm/nPo=
-  dependencies:
-    commander "~2.1.0"
 
 lodash@^4.15.0, lodash@^4.17.15:
   version "4.17.15"
