@@ -12,7 +12,8 @@ http.createServer((req, res) => {
   res.end();
 }).listen(process.env.PORT || 3333);
 
-cron.schedule('0,15,30,45 * * * *', async () => {
+// Keep the bot awake
+cron.schedule('0,20,40 * * * *', async () => {
   axios.get('http://covid19nowbot.herokuapp.com/');
 });
 
