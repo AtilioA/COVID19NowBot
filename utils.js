@@ -1,8 +1,10 @@
 /* eslint-disable no-unused-vars */
+const mongoose = require('mongoose');
+const { Chat } = require('./chat.model.js');
 const roundTo = require("round-to");
 const date = require('date-and-time');
 const { getCountryStats } = require('./data/consume_api');
-
+const { translate } = require("./locales/translations.js");
 
 function addDiffEmoji(diffString) {
   return (parseFloat(diffString) < 0 ? "📉 " : "📈 ") + diffString;
@@ -100,9 +102,9 @@ function createRankingString(order = "top", nCountries, countriesList) {
   return rankingString;
 }
 
-async function clearOldMessages(tgBot) {
+async function clearOldMessages(bot) {
   // Get updates for the bot
-  const updates = await tgBot.telegram.getUpdates(0, 100, -1);
+  const updates = await bot.telegram.getUpdates(0, 100, -1);
 
   //  Add 1 to the ID of the last one, if there is one
   return updates.length > 0
@@ -111,4 +113,29 @@ async function clearOldMessages(tgBot) {
     ;
 }
 
-module.exports = { calculateDiffDays, titleCase, createRankingString, formatDiff, clearOldMessages };
+async function changeChatLocale(locale, ctx) {
+  const Chat = mongoose.model('Chat');
+  const chatQuery = await Chat.findOne({ id: ctx.callbackQuery.message.chat.id }, async (err, doc) => {
+    if (!doc) {
+      console.log("New chat.");
+      new Chat({
+        id: ctx.message.chat.id.toString(),
+        locale: "br"
+      }).save().then(async () => {
+        console.log("Saved new chat.");
+        await ctx.replyWithMarkdown(translate("setLocale", locale, locale));
+      }).catch(async (err) => {
+        await ctx.replyWithMarkdown(`Couldn't save language preference as *${locale}*!`);
+        console.log("Couldn't create chat: " + err);
+      });
+    }
+    else {
+      console.log("Chat already exists.");
+      doc.locale = locale;
+      await doc.save();
+      await ctx.replyWithMarkdown(translate("setLocale", locale, locale));
+    }
+  });
+}
+
+module.exports = { calculateDiffDays, titleCase, createRankingString, formatDiff, changeChatLocale, clearOldMessages };
