@@ -1542,6 +1542,25 @@ tabletojson@^2.0.3:
     got "^10.6.0"
     tunnel "0.0.6"
 
+telegraf-keyboard@^1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/telegraf-keyboard/-/telegraf-keyboard-1.1.2.tgz#445c1efd51bfcd09a6a816e1b4c6c8255cce60c2"
+  integrity sha512-0yEsI8M5YdQQQmKa4xijt6glZREwhs2G82P7x2wrUlmfebKo79AiilhD/w3fgR1kcFFfNbFF2LQzovStBSviQQ==
+  dependencies:
+    telegraf "^3.29.0"
+
+telegraf@^3.29.0:
+  version "3.37.0"
+  resolved "https://registry.yarnpkg.com/telegraf/-/telegraf-3.37.0.tgz#f88ae3d4bddac6f479137d4c867489acf3f57b66"
+  integrity sha512-V3448qwfOolBqkIc87yxjW4zMvR2P6AIF24pPTlX9WhZPwA1TF/x3nQhnWPRLtGh2SJuvDcr83iTkXPXT7Opnw==
+  dependencies:
+    debug "^4.0.1"
+    minimist "^1.2.0"
+    module-alias "^2.2.2"
+    node-fetch "^2.2.0"
+    sandwich-stream "^2.0.1"
+    telegram-typings "^3.6.0"
+
 telegraf@^3.36.0:
   version "3.36.0"
   resolved "https://registry.yarnpkg.com/telegraf/-/telegraf-3.36.0.tgz#eab1160159df6033d3cb92ac990902523277822a"

@@ -6,8 +6,9 @@ var covid19Api = require("covid19-api");
 var { locales, translate } = require("./locales/translations.js");
 
 const bot = require('./bot_config.js');
+const Keyboard = require('telegraf-keyboard');
 const getWorldStats = require('./data/scrap_worldometer.js');
-const { calculateDiffDays, createRankingString, formatDiff, clearOldMessages } = require('./utils.js');
+const { calculateDiffDays, createRankingString, formatDiff, changeChatLocale, clearOldMessages } = require('./utils.js');
 const { flag } = require('country-emoji');
 const { Chat } = require('./chat.model.js');
 const mongoose = require('mongoose');
@@ -31,6 +32,39 @@ bot.command(['/start'], async (ctx) => {
   (thisChat ? locale = thisChat.locale : locale = "en");
 
   ctx.replyWithMarkdown(translate("start", locale), { reply_to_message_id: ctx.message.message_id, disable_web_page_preview: true });
+});
+
+const options = {
+  inline: true,
+  duplicates: false,
+  newline: false,
+};
+const languageKeyboard = new Keyboard(options);
+languageKeyboard
+  .add('🇺🇸 English', '🇫🇷 French') // first line
+  .add('🇧🇷 Brazilian Portuguese'); // second line
+
+bot.command(['/language'], async (ctx) => {
+  ctx.reply('Please, select the language:', languageKeyboard.draw());
+}).on('callback_query', (ctx) => {
+  console.log(`ctx.callbackQuery.data from ${ctx.callbackQuery.from.first_name} (${ctx.from.username})`);
+
+  var locale;
+  switch (ctx.callbackQuery.data.slice(0, 4)) {
+    case "🇺🇸":
+      locale = "en";
+      break;
+    case "🇧🇷":
+      locale = "br";
+      break;
+    case "🇫🇷":
+      locale = "fr";
+      break;
+  }
+
+  ctx.answerCbQuery(ctx.callbackQuery.data);
+  changeChatLocale(locale, ctx);
+
 });
 
 bot.command(['/help', '/ajuda'], async (ctx) => {
@@ -69,11 +103,11 @@ bot.hears([/\/(?:locale(?:@COVID19NowBot)?(?:\s*(\w+))?)|^\/(en)$|^\/(pt)$|^\/(b
     case "english":
       locale = "en";
       break;
-    case "french":
-      locale = "fr";
-      break;
     case "pt":
       locale = "br";
+      break;
+    case "french":
+      locale = "fr";
       break;
   }
 
@@ -83,7 +117,7 @@ bot.hears([/\/(?:locale(?:@COVID19NowBot)?(?:\s*(\w+))?)|^\/(en)$|^\/(pt)$|^\/(b
 
     const chatQuery = await Chat.findOne({ id: ctx.message.chat.id }, async (err, doc) => {
       if (!doc) {
-        console.log("new chat");
+        console.log("New chat");
         new Chat({
           id: ctx.message.chat.id.toString(),
           locale: "br"
@@ -96,7 +130,7 @@ bot.hears([/\/(?:locale(?:@COVID19NowBot)?(?:\s*(\w+))?)|^\/(en)$|^\/(pt)$|^\/(b
         });
       }
       else {
-        console.log("chat exists already");
+        console.log("Chat already exists");
         doc.locale = locale;
         await doc.save();
         await ctx.replyWithMarkdown(translate("setLocale", locale, locale), { reply_to_message_id: ctx.message.message_id });
@@ -109,7 +143,7 @@ bot.hears([/\/(?:locale(?:@COVID19NowBot)?(?:\s*(\w+))?)|^\/(en)$|^\/(pt)$|^\/(b
 });
 
 bot.command(['/all', '/total', '/world'], async (ctx) => {
-  console.log("World.");
+  console.log(`World from ${ctx.from.first_name} (${ctx.from.username})`);
   await ctx.replyWithChatAction("typing");
 
   var scrapObj = await getWorldStats();
@@ -151,7 +185,7 @@ bot.hears([/\/(top|bottom)(?:@COVID19NowBot)? (\d+)/], async (ctx) => {
       await ctx.replyWithChatAction("typing");
     }
 
-    console.log(commandText, nCountries);
+    console.log(`{commandText} {nCountries} from ${ctx.from.first_name} (${ctx.from.username})`);
 
     var countriesReports = await covid19Api.getReports();
     switch (commandText) {
@@ -186,7 +220,7 @@ bot.hears(/^\/?(\w+\.?\s*\w*)$/, async (ctx) => {
   }
 
   if (countryObj != undefined) {
-    console.log(countryObj["Country"]);
+    console.log(`${countryObj["Country"]} from ${ctx.from.first_name} (${ctx.from.username})`);
     const countryFlag = flag(countryObj["Country"]);
 
     const now = new Date();
@@ -213,3 +247,5 @@ bot.hears(/^\/?(\w+\.?\s*\w*)$/, async (ctx) => {
 
 // clearOldMessages(bot);
 bot.launch();
+// bot.startPolling();
+console.log('Bot started at', new Date());

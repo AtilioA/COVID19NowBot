@@ -20,10 +20,8 @@ function translateStart(locale, ...args) {
     "en": `🦠 @COVID19NowBot
 Hello! This bot can fetch information and numbers of COVID-19 cases.
 
-You can change the language with the following commands:
-*/en* for English
-*/br* for Brazilian Portuguese (Português do Brasil)
-*/fr* for French (Français)
+You can change the language with the following command:
+*/language*
 
 🧭 *AVAILABLE COMMANDS*:
 */start* shows the welcome message.
@@ -76,11 +74,8 @@ function translateHelp(locale, ...args) {
     "en": `🦠 @COVID19NowBot
 Hello! This bot can fetch information and numbers of COVID-19 cases.
 
-You can change the language with the following commands:
-*/en* for English
-*/br* for Brazilian Portuguese (Português do Brasil)
-*/fr* for French (Français)
-Or \`/locale lang\`, where \`lang\` is *en*, *br* or *fr*.
+You can change the language with the following command:
+*/language*
 
 🧭 *AVAILABLE COMMANDS*:
 */start* shows the welcome message.
@@ -254,9 +249,9 @@ function translateCountry(locale, ...args) {
 
 function translateSetLocale(locale, ...args) {
   const setLocale = {
-    "en": `I've set the display language to *${locale}*!`,
-    "br": `Defini a preferência de idioma para *${locale}*!`,
-    "fr": `J'ai défini la préférence de langue sur *${locale}*!`
+    "en": `I've set the display language to *${locale.toUpperCase()}*!`,
+    "br": `Defini a preferência de idioma para *${locale.toUpperCase()}*!`,
+    "fr": `J'ai défini la préférence de langue sur *${locale.toUpperCase()}*!`
   };
 
   return setLocale[locale];
