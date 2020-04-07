@@ -115,11 +115,11 @@ async function clearOldMessages(bot) {
 
 async function changeChatLocale(locale, ctx) {
   const Chat = mongoose.model('Chat');
-  const chatQuery = await Chat.findOne({ id: ctx.callbackQuery.message.chat.id }, async (err, doc) => {
+  const chatQuery = await Chat.findOne({ id: ctx.update.callback_query.message.chat.id }, async (err, doc) => {
     if (!doc) {
       console.log("New chat.");
       new Chat({
-        id: ctx.message.chat.id.toString(),
+        id: ctx.update.callback_query.message.chat.id.toString(),
         locale: "br"
       }).save().then(async () => {
         console.log("Saved new chat.");
