@@ -15,23 +15,27 @@ async function getWorldStats() {
         elements = $(element).text().split("\n");
       });
 
-      elements.splice(0, 2);
-      elements = elements.map(e => e.trim());
+      if (elements) {
 
-      const scrapedStats = {
-        totalCases: elements[0],
-        newCases: elements[1],
-        totalDeaths: elements[2],
-        newDeaths: elements[3],
-        totalRecovered: elements[4],
-        activeCases: elements[5],
-        seriousCases: elements[6]
-      };
+        elements.splice(0, 2);
+        elements = elements.map(e => e.trim());
 
-      return scrapedStats;
+        const scrapedStats = {
+          totalCases: elements[0],
+          newCases: elements[1],
+          totalDeaths: elements[2],
+          newDeaths: elements[3],
+          totalRecovered: elements[4],
+          activeCases: elements[5],
+          seriousCases: elements[6]
+        };
+
+        return scrapedStats;
+      }
     })
     .catch((err) => {
       console.log(err);
+      return undefined;
     });
 }
 
