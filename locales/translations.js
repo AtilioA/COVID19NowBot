@@ -197,7 +197,7 @@ Difference to last week:
   Fetched at ${args[7]}.`,
 
     "br": `Hoje — ${args[15]} *${args[8]}*:
-  🦠 ${args[5]} novos casos de COVID- 19.
+  🦠 ${args[5]} novos casos de COVID-19.
   ☠️ ${args[6]} pessoas morreram.
 
 Atualmente — ${args[15]} *${args[8]}*:
