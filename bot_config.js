@@ -14,7 +14,7 @@ http.createServer((req, res) => {
 
 // Keep the bot awake
 cron.schedule('0,15,30,45 * * * *', async () => {
-  axios.get('http://covid19nowbot.herokuapp.com/');
+	axios.get('http://covid19nowbot.herokuapp.com/');
 });
 
 module.exports = bot;

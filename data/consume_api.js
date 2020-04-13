@@ -15,11 +15,12 @@ async function getCountryStats(country) {
         default:
           break;
       }
-      
+
       return res.data[country];
     })
     .catch((err) => {
       console.log(err);
+      return undefined;
     });
 }
 
