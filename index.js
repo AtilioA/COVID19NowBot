@@ -4,6 +4,7 @@ const date = require('date-and-time');
 var covid19Api = require("covid19-api");
 
 var { locales, translate } = require("./locales/translations.js");
+var countries = require('./countries.json');
 
 const bot = require('./bot_config.js');
 const Keyboard = require('telegraf-keyboard');
@@ -210,40 +211,42 @@ bot.hears([/\/(top|bottom)(?:@COVID19NowBot)? (\d+)/], async (ctx) => {
 
 bot.hears(/^\/?(\w+\.?\s*\w*)$/, async (ctx) => {
   const text = ctx.match[1].toString();
+  
+  if (countries.includes(text.toUpperCase())) {
+    var countriesReports = await covid19Api.getReports();
+    var countryObj = undefined;
 
-  var countriesReports = await covid19Api.getReports();
-  var countryObj = undefined;
-
-  for (let country of countriesReports[0][0]['table'][0]) {
-    if (text.toLowerCase() == country['Country'].toLowerCase()) {
-      await ctx.replyWithChatAction("typing");
-      countryObj = country;
-    }
-  }
-
-  if (countryObj != undefined) {
-    console.log(`${countryObj["Country"]} from ${ctx.from.first_name} (${ctx.from.username})`);
-    const countryFlag = flag(countryObj["Country"]);
-
-    const now = new Date();
-    var currentDate = date.format(now, 'DD/MM/YYYY HH:mm:ss UTC', true);
-
-    var diffConfirmed, diffDeaths, diffRecovered, diffConfirmedPercentage, diffDeathsPercentage, diffRecoveredPercentage;
-
-    var diffObj = await calculateDiffDays(7, countryObj['Country']);
-    if (diffObj) {
-      var formatedDiffObj = formatDiff(diffObj);
-      ({ diffConfirmed, diffDeaths, diffRecovered, diffConfirmedPercentage, diffDeathsPercentage, diffRecoveredPercentage } = formatedDiffObj);
+    for (let country of countriesReports[0][0]['table'][0]) {
+      if (text.toLowerCase() == country['Country'].toLowerCase()) {
+        await ctx.replyWithChatAction("typing");
+        countryObj = country;
+      }
     }
 
-    const Chat = mongoose.model('Chat');
-    var locale;
-    var thisChat = await Chat.findOne({ id: ctx.message.chat.id });
-    (thisChat ? locale = thisChat.locale : locale = "en");
+    if (countryObj != undefined) {
+      console.log(`${countryObj["Country"]} from ${ctx.from.first_name} (${ctx.from.username})`);
+      const countryFlag = flag(countryObj["Country"]);
 
-    var countryString = translate("countryStats", locale, countryObj['TotalCases'], countryObj['TotalDeaths'] || 0, countryObj['ActiveCases'] || 0, countryObj['Serious_Critical'] || 0, countryObj['TotalRecovered'] || 0, countryObj['NewCases'] || 0, countryObj['NewDeaths'] || 0, currentDate, countryObj["Country"], diffConfirmed, diffDeaths, diffRecovered, diffConfirmedPercentage, diffDeathsPercentage, diffRecoveredPercentage, countryFlag || "");
+      const now = new Date();
+      var currentDate = date.format(now, 'DD/MM/YYYY HH:mm:ss UTC', true);
 
-    await ctx.replyWithMarkdown(countryString, { parseMode: 'Markdown', reply_to_message_id: ctx.message.message_id });
+      var diffConfirmed, diffDeaths, diffRecovered, diffConfirmedPercentage, diffDeathsPercentage, diffRecoveredPercentage;
+
+      var diffObj = await calculateDiffDays(7, countryObj['Country']);
+      if (diffObj) {
+        var formatedDiffObj = formatDiff(diffObj);
+        ({ diffConfirmed, diffDeaths, diffRecovered, diffConfirmedPercentage, diffDeathsPercentage, diffRecoveredPercentage } = formatedDiffObj);
+      }
+
+      const Chat = mongoose.model('Chat');
+      var locale;
+      var thisChat = await Chat.findOne({ id: ctx.message.chat.id });
+      (thisChat ? locale = thisChat.locale : locale = "en");
+
+      var countryString = translate("countryStats", locale, countryObj['TotalCases'], countryObj['TotalDeaths'] || 0, countryObj['ActiveCases'] || 0, countryObj['Serious_Critical'] || 0, countryObj['TotalRecovered'] || 0, countryObj['NewCases'] || 0, countryObj['NewDeaths'] || 0, currentDate, countryObj["Country"], diffConfirmed, diffDeaths, diffRecovered, diffConfirmedPercentage, diffDeathsPercentage, diffRecoveredPercentage, countryFlag || "");
+
+      await ctx.replyWithMarkdown(countryString, { parseMode: 'Markdown', reply_to_message_id: ctx.message.message_id });
+    }
   }
 });
 
