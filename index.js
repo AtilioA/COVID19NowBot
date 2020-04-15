@@ -147,7 +147,8 @@ bot.command(['/all', '/total', '/world'], async (ctx) => {
   console.log(`World from ${ctx.from.first_name} (${ctx.from.username})`);
   await ctx.replyWithChatAction("typing");
 
-  var scrapObj = await getWorldStats();
+  var scrapObj = await covid19Api.getReports();
+  scrapObj = scrapObj[0][0]['table'][0][0]
   if (scrapObj) {
     const now = new Date();
     var currentDate = date.format(now, 'DD/MM/YYYY HH:mm:ss UTC', true);
@@ -157,9 +158,9 @@ bot.command(['/all', '/total', '/world'], async (ctx) => {
     var thisChat = await Chat.findOne({ id: ctx.message.chat.id });
     (thisChat ? locale = thisChat.locale : locale = "en");
 
-    var worldString = translate("worldStats", locale, scrapObj['totalCases'], scrapObj['totalDeaths'] || 0, scrapObj['activeCases'], scrapObj['seriousCases'], scrapObj['totalRecovered'], scrapObj['newCases'], scrapObj['newDeaths'], currentDate, "🗺");
+    var worldString = translate("worldStats", locale, scrapObj['TotalCases'], scrapObj['TotalDeaths'] || 0, scrapObj['ActiveCases'] || 0, scrapObj['Serious_Critical'] || 0, scrapObj['TotalRecovered'] || 0, scrapObj['NewCases'] || 0, scrapObj['NewDeaths'] || 0, currentDate, "🗺");
 
-    await ctx.replyWithMarkdown(worldString, { reply_to_message_id: ctx.message.message_id });
+    await ctx.replyWithMarkdown(worldString, { parseMode: 'Markdown', reply_to_message_id: ctx.message.message_id });
   }
 });
 
