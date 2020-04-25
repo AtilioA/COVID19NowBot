@@ -212,7 +212,7 @@ bot.hears([/\/(top|bottom)(?:@COVID19NowBot)? (\d+)/], async (ctx) => {
 
 bot.hears(/^\/?(\w+\.?\s*\w*)$/, async (ctx) => {
   const text = ctx.match[1].toString();
-  
+
   if (countries.includes(text.toUpperCase())) {
     var countriesReports = await covid19Api.getReports();
     var countryObj = undefined;
