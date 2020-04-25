@@ -137,7 +137,7 @@ function translateWorldStats(locale, ...args) {
   🦠 ${args[5]} new cases of COVID-19.
   ☠️ ${args[6]} people died.
 
-So far — ${args[8]} * World *:
+So far — ${args[8]} *World*:
   🦠 ${args[0]} cases of COVID-19.
   ☠️ ${args[1]} people died.
   😷 ${args[2]} active cases.
@@ -178,11 +178,11 @@ Récupéré à ${args[7]}.`,
 
 function translateCountryStats(locale, ...args) {
   const countryStats = {  // /country message
-    "en": `Today — ${args[15]} *${args[8]} *:
+    "en": `Today — ${args[15]} *${args[8]}*:
   🦠 ${args[5]} new cases of COVID-19.
   ☠️ ${args[6]} people died.
 
-So far — ${args[15]} *${args[8]} *:
+So far — ${args[15]} *${args[8]}*:
   🦠 ${args[0]} cases of COVID-19.
   ☠️ ${args[1]} people died.
   😷 ${args[2]} active cases.
