@@ -4,10 +4,10 @@ const date = require('date-and-time');
 var covid19Api = require("covid19-api");
 
 var { locales, translate } = require("./locales/translations.js");
+var countries = require('./countries.json');
 
 const bot = require('./bot_config.js');
 const Keyboard = require('telegraf-keyboard');
-const getWorldStats = require('./data/scrap_worldometer.js');
 const { calculateDiffDays, createRankingString, formatDiff, changeChatLocale, clearOldMessages } = require('./utils.js');
 const { flag } = require('country-emoji');
 const { Chat } = require('./chat.model.js');
@@ -26,10 +26,9 @@ bot.command(['/start'], async (ctx) => {
 
   await ctx.replyWithChatAction("typing");
   const Chat = mongoose.model('Chat');
-
   var locale;
   var thisChat = await Chat.findOne({ id: ctx.message.chat.id });
-  (thisChat ? locale = thisChat.locale : locale = "en");
+  (thisChat ? locale = thisChat.locale : locale = ctx.update.message.from.language_code);
 
   ctx.replyWithMarkdown(translate("start", locale), { reply_to_message_id: ctx.message.message_id, disable_web_page_preview: true });
 });
@@ -41,11 +40,18 @@ const options = {
 };
 const languageKeyboard = new Keyboard(options);
 languageKeyboard
-  .add('🇺🇸 English', '🇫🇷 French') // first line
-  .add('🇧🇷 Brazilian Portuguese'); // second line
+  .add('🇺🇸 English', '🇫🇷 Français') // first line
+  .add('🇧🇷 Português Brasileiro'); // second line
 
 bot.command(['/language'], async (ctx) => {
-  ctx.reply('Please, select the language:', languageKeyboard.draw());
+  const Chat = mongoose.model('Chat');
+  var locale;
+  var thisChat = await Chat.findOne({ id: ctx.message.chat.id });
+  (thisChat ? locale = thisChat.locale : locale = ctx.update.message.from.language_code);
+
+  const selectLanguage = translate("selectLanguage", locale);
+
+  ctx.reply(selectLanguage, languageKeyboard.draw());
 }).on('callback_query', (ctx) => {
   console.log(`/language callback_query from ${ctx.callbackQuery.from.first_name} (${ctx.from.username})`);
 
@@ -55,7 +61,7 @@ bot.command(['/language'], async (ctx) => {
       locale = "en";
       break;
     case "🇧🇷":
-      locale = "br";
+      locale = "pt-br";
       break;
     case "🇫🇷":
       locale = "fr";
@@ -73,7 +79,7 @@ bot.command(['/help', '/ajuda'], async (ctx) => {
   const Chat = mongoose.model('Chat');
   var locale;
   var thisChat = await Chat.findOne({ id: ctx.message.chat.id });
-  (thisChat ? locale = thisChat.locale : locale = "en");
+  (thisChat ? locale = thisChat.locale : locale = ctx.update.message.from.language_code);
 
   ctx.replyWithMarkdown(translate("help", locale), { reply_to_message_id: ctx.message.message_id, disable_web_page_preview: true });
 });
@@ -84,12 +90,12 @@ bot.command(['/country'], async (ctx) => {
   const Chat = mongoose.model('Chat');
   var locale;
   var thisChat = await Chat.findOne({ id: ctx.message.chat.id });
-  (thisChat ? locale = thisChat.locale : locale = "en");
+  (thisChat ? locale = thisChat.locale : locale = ctx.update.message.from.language_code);
 
   ctx.replyWithMarkdown(translate("country", locale), { reply_to_message_id: ctx.message.message_id });
 });
 
-bot.hears([/\/(?:locale(?:@COVID19NowBot)?(?:\s*(\w+))?)|^\/(en)$|^\/(pt)$|^\/(br)$|^\/(fr)$/], async (ctx) => {
+bot.hears([/\/(?:locale(?:@COVID19NowBot)?(?:\s*(\w+))?)|^\/(en)$|^\/(pt)$|^\/((pt_)?br)$|^\/(fr)$/i], async (ctx) => {
   for (let element of ctx.match.slice(1)) {
     if (element) {
       var locale = element;
@@ -104,7 +110,10 @@ bot.hears([/\/(?:locale(?:@COVID19NowBot)?(?:\s*(\w+))?)|^\/(en)$|^\/(pt)$|^\/(b
       locale = "en";
       break;
     case "pt":
-      locale = "br";
+      locale = "pt-br";
+      break;
+    case "br":
+      locale = "pt-br";
       break;
     case "french":
       locale = "fr";
@@ -120,7 +129,7 @@ bot.hears([/\/(?:locale(?:@COVID19NowBot)?(?:\s*(\w+))?)|^\/(en)$|^\/(pt)$|^\/(b
         console.log("New chat");
         new Chat({
           id: ctx.message.chat.id.toString(),
-          locale: "br"
+          locale: "pt-br"
         }).save().then(async () => {
           console.log("Saved new chat.");
           await ctx.replyWithMarkdown(translate("setLocale", locale, locale), { reply_to_message_id: ctx.message.message_id });
@@ -146,7 +155,8 @@ bot.command(['/all', '/total', '/world'], async (ctx) => {
   console.log(`World from ${ctx.from.first_name} (${ctx.from.username})`);
   await ctx.replyWithChatAction("typing");
 
-  var scrapObj = await getWorldStats();
+  var scrapObj = await covid19Api.getReports();
+  scrapObj = scrapObj[0][0]['table'][0][0];
   if (scrapObj) {
     const now = new Date();
     var currentDate = date.format(now, 'DD/MM/YYYY HH:mm:ss UTC', true);
@@ -154,11 +164,11 @@ bot.command(['/all', '/total', '/world'], async (ctx) => {
     const Chat = mongoose.model('Chat');
     var locale;
     var thisChat = await Chat.findOne({ id: ctx.message.chat.id });
-    (thisChat ? locale = thisChat.locale : locale = "en");
+    (thisChat ? locale = thisChat.locale : locale = ctx.update.message.from.language_code);
 
-    var worldString = translate("worldStats", locale, scrapObj['totalCases'], scrapObj['totalDeaths'] || 0, scrapObj['activeCases'], scrapObj['seriousCases'], scrapObj['totalRecovered'], scrapObj['newCases'], scrapObj['newDeaths'], currentDate, "🗺");
+    var worldString = translate("worldStats", locale, scrapObj['TotalCases'], scrapObj['TotalDeaths'] || 0, scrapObj['ActiveCases'] || 0, scrapObj['Serious_Critical'] || 0, scrapObj['TotalRecovered'] || 0, scrapObj['NewCases'] || 0, scrapObj['NewDeaths'] || 0, currentDate, "🗺");
 
-    await ctx.replyWithMarkdown(worldString, { reply_to_message_id: ctx.message.message_id });
+    await ctx.replyWithMarkdown(worldString, { parseMode: 'Markdown', reply_to_message_id: ctx.message.message_id });
   }
 });
 
@@ -174,14 +184,20 @@ bot.hears(['/babu', '/tropa_do_babu', /^babu$/i], async (ctx) => {
     }]);
 });
 
-bot.hears([/\/(top|bottom)(?:@COVID19NowBot)? (\d+)/], async (ctx) => {
+bot.hears([/\/(top|bottom)(?:@COVID19NowBot)?\s*(\d+)?/i], async (ctx) => {
   var commandText = ctx.match[1], nCountries = ctx.match[2];
 
   if (commandText == "top" || commandText == "bottom") {
     await ctx.replyWithChatAction("typing");
+
+    const Chat = mongoose.model('Chat');
+    var locale;
+    var thisChat = await Chat.findOne({ id: ctx.message.chat.id });
+    (thisChat ? locale = thisChat.locale : locale = ctx.update.message.from.language_code);
+
     if (!nCountries) { nCountries = 10; }
     if (nCountries > 100) {
-      const nTooBigWarning = `The maximum number of countries is *100*. I'll use *10* instead of ${nCountries}.`;
+      const nTooBigWarning = translate("maxCountries", locale, nCountries);
       await ctx.replyWithMarkdown(nTooBigWarning, { reply_to_message_id: ctx.message.message_id });
       nCountries = 10;
       await ctx.replyWithChatAction("typing");
@@ -192,10 +208,10 @@ bot.hears([/\/(top|bottom)(?:@COVID19NowBot)? (\d+)/], async (ctx) => {
     var countriesReports = await covid19Api.getReports();
     switch (commandText) {
       case "top":
-        countriesReports = countriesReports[0][0]['table'][0].slice(0, -1).slice(null, nCountries);
+        countriesReports = countriesReports[0][0]['table'][0].slice(1, -1).slice(0, nCountries);
         break;
       case "bottom":
-        countriesReports = countriesReports[0][0]['table'][0].slice(0, -1).reverse().slice(null, nCountries);
+        countriesReports = countriesReports[0][0]['table'][0].slice(0, -2).reverse().slice(0, nCountries);
         break;
       default:
         console.log(`Failed switch-case for /${commandText}`);
@@ -203,6 +219,7 @@ bot.hears([/\/(top|bottom)(?:@COVID19NowBot)? (\d+)/], async (ctx) => {
     }
 
     const rankingString = createRankingString(commandText, nCountries, countriesReports);
+    const translatedRankingString = translate("rankingString", locale, rankingString);
 
     await ctx.replyWithMarkdown(rankingString, { reply_to_message_id: ctx.message.message_id });
   }
@@ -211,43 +228,44 @@ bot.hears([/\/(top|bottom)(?:@COVID19NowBot)? (\d+)/], async (ctx) => {
 bot.hears(/^\/?(\w+\.?\s*\w*)$/, async (ctx) => {
   const text = ctx.match[1].toString();
 
-  var countriesReports = await covid19Api.getReports();
-  var countryObj = undefined;
+  if (countries.includes(text.toUpperCase())) {
+    var countriesReports = await covid19Api.getReports();
+    var countryObj = undefined;
 
-  for (let country of countriesReports[0][0]['table'][0]) {
-    if (text.toLowerCase() == country['Country'].toLowerCase()) {
-      await ctx.replyWithChatAction("typing");
-      countryObj = country;
-    }
-  }
-
-  if (countryObj != undefined) {
-    console.log(`${countryObj["Country"]} from ${ctx.from.first_name} (${ctx.from.username})`);
-    const countryFlag = flag(countryObj["Country"]);
-
-    const now = new Date();
-    var currentDate = date.format(now, 'DD/MM/YYYY HH:mm:ss UTC', true);
-
-    var diffConfirmed, diffDeaths, diffRecovered, diffConfirmedPercentage, diffDeathsPercentage, diffRecoveredPercentage;
-
-    var diffObj = await calculateDiffDays(7, countryObj['Country']);
-    if (diffObj) {
-      var formatedDiffObj = formatDiff(diffObj);
-      ({ diffConfirmed, diffDeaths, diffRecovered, diffConfirmedPercentage, diffDeathsPercentage, diffRecoveredPercentage } = formatedDiffObj);
+    for (let country of countriesReports[0][0]['table'][0]) {
+      if (text.toLowerCase() == country['Country'].toLowerCase()) {
+        await ctx.replyWithChatAction("typing");
+        countryObj = country;
+      }
     }
 
-    const Chat = mongoose.model('Chat');
-    var locale;
-    var thisChat = await Chat.findOne({ id: ctx.message.chat.id });
-    (thisChat ? locale = thisChat.locale : locale = "en");
+    if (countryObj != undefined) {
+      console.log(`${countryObj["Country"]} from ${ctx.from.first_name} (${ctx.from.username})`);
+      const countryFlag = flag(countryObj["Country"]);
 
-    var countryString = translate("countryStats", locale, countryObj['TotalCases'], countryObj['TotalDeaths'] || 0, countryObj['ActiveCases'] || 0, countryObj['Serious_Critical'] || 0, countryObj['TotalRecovered'] || 0, countryObj['NewCases'] || 0, countryObj['NewDeaths'] || 0, currentDate, countryObj["Country"], diffConfirmed, diffDeaths, diffRecovered, diffConfirmedPercentage, diffDeathsPercentage, diffRecoveredPercentage, countryFlag || "");
+      const now = new Date();
+      var currentDate = date.format(now, 'DD/MM/YYYY HH:mm:ss UTC', true);
 
-    await ctx.replyWithMarkdown(countryString, { parseMode: 'Markdown', reply_to_message_id: ctx.message.message_id });
+      var diffConfirmed, diffDeaths, diffRecovered, diffConfirmedPercentage, diffDeathsPercentage, diffRecoveredPercentage;
+
+      var diffObj = await calculateDiffDays(7, countryObj['Country']);
+      if (diffObj) {
+        var formatedDiffObj = formatDiff(diffObj);
+        ({ diffConfirmed, diffDeaths, diffRecovered, diffConfirmedPercentage, diffDeathsPercentage, diffRecoveredPercentage } = formatedDiffObj);
+      }
+
+      const Chat = mongoose.model('Chat');
+      var locale;
+      var thisChat = await Chat.findOne({ id: ctx.message.chat.id });
+      (thisChat ? locale = thisChat.locale : locale = ctx.update.message.from.language_code);
+
+      var countryString = translate("countryStats", locale, countryObj['TotalCases'], countryObj['TotalDeaths'] || 0, countryObj['ActiveCases'] || 0, countryObj['Serious_Critical'] || 0, countryObj['TotalRecovered'] || 0, countryObj['NewCases'] || 0, countryObj['NewDeaths'] || 0, currentDate, countryObj["Country"], diffConfirmed, diffDeaths, diffRecovered, diffConfirmedPercentage, diffDeathsPercentage, diffRecoveredPercentage, countryFlag || "");
+
+      await ctx.replyWithMarkdown(countryString, { parseMode: 'Markdown', reply_to_message_id: ctx.message.message_id });
+    }
   }
 });
 
-// clearOldMessages(bot);
 bot.launch();
 // bot.startPolling();
 console.log('Bot started at', new Date());
