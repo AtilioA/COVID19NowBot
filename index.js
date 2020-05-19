@@ -267,5 +267,5 @@ bot.hears(/^\/?(\w+\.?\s*\w*)$/, async (ctx) => {
 });
 
 bot.launch();
-// bot.startPolling();
+bot.startPolling();
 console.log('Bot started at', new Date());

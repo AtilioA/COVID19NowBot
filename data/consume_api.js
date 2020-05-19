@@ -20,7 +20,6 @@ async function getCountryStats(country) {
     })
     .catch((err) => {
       console.log(err);
-      return undefined;
     });
 }
 

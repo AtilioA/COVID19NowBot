@@ -3,7 +3,7 @@ const cheerio = require('cheerio');
 
 const page = "https://www.worldometers.info/coronavirus/";
 async function getWorldStats() {
-  return await axios.get(page)
+  return axios.get(page)
     .then((res) => {
       const $ = cheerio.load(res.data);
 
@@ -35,7 +35,6 @@ async function getWorldStats() {
     })
     .catch((err) => {
       console.log(err);
-      return undefined;
     });
 }
 
