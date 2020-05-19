@@ -1,4 +1,9 @@
 function translate(stringID, locale, ...args) {
+  if (!(locales.includes(locale))) {
+    console.log(locale, locales);
+    locale = "en";
+  }
+
   switch (stringID) {
     case "start":
       return translateStart(locale, ...args);
@@ -12,6 +17,10 @@ function translate(stringID, locale, ...args) {
       return translateCountry(locale, ...args);
     case "setLocale":
       return translateSetLocale(locale, ...args);
+    case "maxCountries":
+      return translateMaxCountries(locale, ...args);
+    case "selectLanguage":
+      return translateSelectLanguage(locale, ...args);
   }
 }
 
@@ -35,7 +44,7 @@ You can change the language with the following command:
 Source: JHU CSSE, Worldometer and [covid19-api on NPM](https://www.npmjs.com/package/covid19-api#-references).
 Created by @AtilioA`,
 
-    "br": `🦠 @COVID19NowBot
+    "pt-br": `🦠 @COVID19NowBot
 Olá! Este bot pode enviar informações e números de casos de COVID-19.
 
 🧭 *COMANDOS DISPONÍVEIS*:
@@ -93,7 +102,7 @@ https://github.com/AtilioA/COVID19NowBot
 Source: JHU CSSE, Worldometer and [covid19-api on NPM](https://www.npmjs.com/package/covid19-api#-references).
 Created by @AtilioA`,
 
-    "br": `🦠 @COVID19NowBot
+    "pt-br": `🦠 @COVID19NowBot
 Olá! Este bot pode enviar informações e números de casos de COVID-19.
 
 🧭 *COMANDO DISPONÍVEIS*:
@@ -146,7 +155,7 @@ So far — ${args[8]} *World*:
 
 Fetched at ${args[7]}.`,
 
-    "br": `Hoje — ${args[8]} *Mundo*:
+    "pt-br": `Hoje — ${args[8]} *Mundo*:
   🦠 ${args[5]} novos casos de COVID-19.
   ☠️ ${args[6]} pessoas morreram.
 
@@ -196,7 +205,7 @@ Difference to last week:
 
   Fetched at ${args[7]}.`,
 
-    "br": `Hoje — ${args[15]} *${args[8]}*:
+    "pt-br": `Hoje — ${args[15]} *${args[8]}*:
   🦠 ${args[5]} novos casos de COVID-19.
   ☠️ ${args[6]} pessoas morreram.
 
@@ -240,7 +249,7 @@ Récupéré à ${args[7]}.`,
 function translateCountry(locale, ...args) {
   const country = { // /"country" message
     "en": "Please specify a country instead of using _/country_.\nExample: */brazil*",
-    "br": "Por favor, especifique um país em vez de usar _/country_. Exemplo: */brazil*.",
+    "pt-br": "Por favor, especifique um país em vez de usar _/country_. Exemplo: */brazil*.",
     "fr": "S'il-vous-plaît, spécifiez un pays au lieu d'utiliser _/country_. Exemple: */brazil*."
   };
 
@@ -250,13 +259,34 @@ function translateCountry(locale, ...args) {
 function translateSetLocale(locale, ...args) {
   const setLocale = {
     "en": `I've set the display language to *${locale.toUpperCase()}*!`,
-    "br": `Defini a preferência de idioma para *${locale.toUpperCase()}*!`,
+    "pt-br": `Defini a preferência de idioma para *${locale.toUpperCase()}*!`,
     "fr": `J'ai défini la préférence de langue sur *${locale.toUpperCase()}*!`
   };
 
   return setLocale[locale];
 }
 
-const locales = ["en", "br", "fr"];
+
+function translateMaxCountries(locale, ...args) {
+  const setLocale = {
+    "en": `The maximum number of countries is *100*. I'll use *10* instead of ${args[0]}.`,
+    "pt-br": `O número máximo de países é *100*. Irei utilizar *10* no lugar de ${args[0]}.`,
+    "fr": `Le nombre de pays maximum est *100*. *10* sera utilisé au lieu de ${args[0]}.`
+  };
+
+  return setLocale[locale];
+}
+
+function translateSelectLanguage(locale, ...args) {
+  const setLocale = {
+    "en": 'Please, select the language:',
+    "pt-br": 'Por favor, selecione o idioma:',
+    "fr": `Veuillez sélectionner la langue:`
+  };
+
+  return setLocale[locale];
+}
+
+const locales = ["en", "pt-br", "fr"];
 
 module.exports = { locales, translate };

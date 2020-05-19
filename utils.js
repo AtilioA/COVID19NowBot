@@ -120,7 +120,7 @@ async function changeChatLocale(locale, ctx) {
       console.log("New chat.");
       new Chat({
         id: ctx.update.callback_query.message.chat.id.toString(),
-        locale: "br"
+        locale: "pt-br"
       }).save().then(async () => {
         console.log("Saved new chat.");
         await ctx.replyWithMarkdown(translate("setLocale", locale, locale));
