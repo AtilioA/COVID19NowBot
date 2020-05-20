@@ -90,8 +90,9 @@ function titleCase(str) {
 function createRankingString(order = "top", nCountries, countriesList) {
   var rankingString = `*${order.toUpperCase()} ${nCountries} COUNTRIES*:\n\n`;
 
-  for (let country of countriesList) {
-    rankingString += `*${country['Country']}*\n`;
+  console.log(countriesList.entries());
+  for (let [i, country] of countriesList.entries()) {
+    rankingString += `${i + 1} - *${country['Country']}*\n`;
     rankingString += `😷 ${country["ActiveCases"] || "0"} ☠️ ${country["TotalDeaths"] || "0"} 💊 ${country["TotalRecovered"] || "0"}\n\n`;
   }
 
