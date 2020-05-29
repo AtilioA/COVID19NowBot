@@ -172,18 +172,6 @@ bot.command(['/all', '/total', '/world'], async (ctx) => {
   }
 });
 
-bot.hears(['/babu', '/tropa_do_babu', /^babu$/i], async (ctx) => {
-  console.log("PAIZÃO TÁ ON");
-  await ctx.replyWithChatAction("typing");
-  ctx.replyWithMarkdown("*PAIZÃO TÁ ON*", { reply_to_message_id: ctx.message.message_id });
-  await ctx.replyWithChatAction("upload_video");
-  ctx.replyWithMediaGroup([
-    {
-      media: 'BAACAgEAAxkBAAOYXotbqYLWGT-HU5KzRicR-Vxq3gUAAucAAzkgWEQfNJz7BNdnXRgE',
-      type: 'video'
-    }]);
-});
-
 bot.hears([/\/(top|bottom)(?:@COVID19NowBot)?\s*(\d+)?/i], async (ctx) => {
   var commandText = ctx.match[1], nCountries = ctx.match[2];
 
@@ -199,7 +187,7 @@ bot.hears([/\/(top|bottom)(?:@COVID19NowBot)?\s*(\d+)?/i], async (ctx) => {
     if (nCountries > 100) {
       const nTooBigWarning = translate("maxCountries", locale, nCountries);
       await ctx.replyWithMarkdown(nTooBigWarning, { reply_to_message_id: ctx.message.message_id });
-      nCountries = 10;
+      nCountries = 100;
       await ctx.replyWithChatAction("typing");
     }
 
@@ -240,7 +228,6 @@ bot.hears(/^\/?(\w+\.?\s*\w*)$/, async (ctx) => {
     }
 
     if (countryObj != undefined) {
-      console.log(`${countryObj["Country"]} from ${ctx.from.first_name} (${ctx.from.username})`);
       const countryFlag = flag(countryObj["Country"]);
 
       const now = new Date();
@@ -267,5 +254,8 @@ bot.hears(/^\/?(\w+\.?\s*\w*)$/, async (ctx) => {
 });
 
 bot.launch();
+
 // bot.startPolling();
+// clearOldMessages(bot);
+
 console.log('Bot started at', new Date());
