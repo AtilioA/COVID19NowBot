@@ -269,9 +269,9 @@ function translateSetLocale(locale, ...args) {
 
 function translateMaxCountries(locale, ...args) {
   const setLocale = {
-    "en": `The maximum number of countries is *100*. I'll use *10* instead of ${args[0]}.`,
-    "pt-br": `O número máximo de países é *100*. Irei utilizar *10* no lugar de ${args[0]}.`,
-    "fr": `Le nombre de pays maximum est *100*. *10* sera utilisé au lieu de ${args[0]}.`
+    "en": `The maximum number of countries is *100*. I'll use *100* instead of ${args[0]}.`,
+    "pt-br": `O número máximo de países é *100*. Irei utilizar *100* no lugar de ${args[0]}.`,
+    "fr": `Le nombre de pays maximum est *100*. *100* sera utilisé au lieu de ${args[0]}.`
   };
 
   return setLocale[locale];
