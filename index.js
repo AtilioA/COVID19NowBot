@@ -95,6 +95,7 @@ bot.command(['/country'], async (ctx) => {
   ctx.replyWithMarkdown(translate("country", locale), { reply_to_message_id: ctx.message.message_id });
 });
 
+// /locale, /en, /pt, /pt_br, /fr
 bot.hears([/\/(?:locale(?:@COVID19NowBot)?(?:\s*(\w+))?)|^\/(en)$|^\/(pt)$|^\/((pt_)?br)$|^\/(fr)$/i], async (ctx) => {
   for (let element of ctx.match.slice(1)) {
     if (element) {
@@ -172,6 +173,7 @@ bot.command(['/all', '/total', '/world'], async (ctx) => {
   }
 });
 
+// /top n, /bottom n
 bot.hears([/\/(top|bottom)(?:@COVID19NowBot)?\s*(\d+)?/i], async (ctx) => {
   var commandText = ctx.match[1], nCountries = ctx.match[2];
 
@@ -213,6 +215,7 @@ bot.hears([/\/(top|bottom)(?:@COVID19NowBot)?\s*(\d+)?/i], async (ctx) => {
   }
 });
 
+// /country
 bot.hears(/^\/?(\w+\.?\s*\w*)$/, async (ctx) => {
   const text = ctx.match[1].toString();
 
