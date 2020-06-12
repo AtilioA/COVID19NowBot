@@ -103,6 +103,7 @@ function createRankingString(order = "top", nCountries, countriesList) {
   return rankingString;
 }
 
+// Clear queue of messages sent to the bot
 async function clearOldMessages(bot) {
   // Get updates for the bot
   const updates = await bot.telegram.getUpdates(0, 100, -1);
@@ -117,7 +118,7 @@ async function clearOldMessages(bot) {
 async function changeChatLocale(locale, ctx) {
   const Chat = mongoose.model('Chat');
   const chatQuery = await Chat.findOne({ id: ctx.update.callback_query.message.chat.id }, async (err, doc) => {
-    if (!doc) {
+    if (!doc) { // Chat not found (register new chat)
       console.log("New chat.");
       new Chat({
         id: ctx.update.callback_query.message.chat.id.toString(),
