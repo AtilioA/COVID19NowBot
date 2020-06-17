@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const { Chat } = require('./chat.model.js');
 const roundTo = require("round-to");
 const date = require('date-and-time');
-const { getCountryStats } = require('./data/consume_api');
+const { getCountryStats } = require('./consume_api');
 const { translate } = require("./locales/translations.js");
 
 function addDiffEmoji(diffString) {
