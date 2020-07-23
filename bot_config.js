@@ -19,7 +19,7 @@ cron.schedule('0,15,30,45 * * * *', async () => {
 });
 
 // Keep INMETBot awake
-cron.schedule('0,15,30,45 6,7,8,10,12,14,16,18,20,22 * * *', () => {
+cron.schedule('0,15,30,45 7,8,10,12,14,18,20,22 * * *', () => {
   axios.get('https://inmetbot.herokuapp.com/');
 });
 
