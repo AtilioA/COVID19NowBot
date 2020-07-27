@@ -105,3 +105,4 @@ dist
 
 ignore/
 .vscode/
+.env.example
