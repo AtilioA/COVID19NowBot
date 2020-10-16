@@ -19,7 +19,7 @@ cron.schedule('0,15,30,45 * * * *', async () => {
 });
 
 // Keep INMETBot awake
-cron.schedule('0,40 7-21,23 * * *', { timezone : "America/Sao_Paulo" }, () => {
+cron.schedule('0,40 10-23,2 * * *', () => {
   axios.get('https://inmetbot.herokuapp.com/');
 });
 
