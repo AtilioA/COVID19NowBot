@@ -12,15 +12,4 @@ http.createServer((req, res) => {
   res.end();
 }).listen(process.env.PORT || 3333);
 
-// Keep the bot awake
-cron.schedule('0,15,30,45 * * * *', async () => {
-  axios.get('http://covid19nowbot.herokuapp.com/');
-  axios.get('https://chooseipsum.herokuapp.com/');
-});
-
-// Keep INMETBot awake
-cron.schedule('0,40 7-21,23 * * *', { timezone : "America/Sao_Paulo" }, () => {
-  axios.get('https://inmetbot.herokuapp.com/');
-});
-
 module.exports = bot;
