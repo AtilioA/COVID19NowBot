@@ -11,7 +11,7 @@
     "cheerio": "^1.0.0-rc.3",
     "country-emoji": "^1.5.3",
     "covid19-api": "^1.2.0",
-    "date-and-time": "^0.13.1",
+    "date-and-time": "^0.14.2",
     "dotenv": "^8.2.0",
     "mongodb": "^3.5.5",
     "mongoose": "^5.9.9",
